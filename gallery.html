@@ -66,6 +66,48 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .gallery-grid .gallery-item img.loaded {
+      opacity: 1;
+    }
+
+    /* ---- Skeleton Loader ---- */
+    .skeleton {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+    .skeleton::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        var(--bg-700) 25%,
+        var(--bg-600) 50%,
+        var(--bg-700) 75%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .skeleton.hidden {
+      display: none;
     }
 
     .gallery-grid .edition-tag {
@@ -83,6 +125,7 @@
       cursor: pointer;
       transition: background 0.2s ease;
       border: 1px solid rgba(202,165,60,0.2);
+      z-index: 2;
     }
 
     .gallery-grid .edition-tag:hover {
@@ -172,6 +215,29 @@
     @media (max-width: 420px) {
       .gallery-grid .gallery-item { flex: 0 0 calc(100% - 14px); }
     }
+
+    /* ---- Placeholder fallback (on error) ---- */
+    .placeholder-fallback {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-700);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      z-index: 1;
+    }
+    .placeholder-fallback svg {
+      margin-bottom: 6px;
+      width: 28px;
+      height: 28px;
+      stroke: var(--text-muted);
+    }
   </style>
 </head>
 
@@ -185,11 +251,11 @@
                 <svg viewBox="0 0 24 24" width="28" height="28"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2"/></svg>
             </button>
             <ul class="mobile-nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#info">Camp Info</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#info">Camp Info</a></li>
                 <li><a href="requirements.html">Requirements</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#faq">FAQ</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
                 <li><a href="https://docs.google.com/forms/d/1kpnIahSj8LwPsCqpc6NtySA5wL6x3ZLZyK99R5Oj99w/viewform?edit_requested=true" target="_blank" rel="noopener" class="btn btn-gold mobile-register-btn">Register Now</a></li>
             </ul>
         </div>
@@ -198,7 +264,7 @@
     <!-- ======== NAVBAR ======== -->
     <nav class="nav" id="nav">
         <div class="container nav-inner">
-            <a href="#hero" class="nav-brand">
+            <a href="index.html" class="nav-brand">
                 <span class="nav-logo">
                     <img src="jt__icon.png" alt="Jesus Tribe" style="width:100%; height:100%; object-fit:contain;" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-fallback\'>JT</span>';" />
                     <span class="logo-fallback" style="display:none;">JT</span>
@@ -211,11 +277,11 @@
 
             <!-- Desktop links -->
             <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#info">Camp Info</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#info">Camp Info</a></li>
                 <li><a href="requirements.html">Requirements</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#faq">FAQ</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
                 <li><a href="https://docs.google.com/forms/d/1kpnIahSj8LwPsCqpc6NtySA5wL6x3ZLZyK99R5Oj99w/viewform?edit_requested=true" target="_blank" rel="noopener" class="btn btn-gold nav-register">Register</a></li>
             </ul>
 
@@ -316,94 +382,94 @@
 
     // ---- PHOTOS ARRAY (full) ----
     galleryPhotos = [
-      // ---- PHOTOS ARRAY (full) ----
-      { label: 'Main Worship', src: 'images/img_6537.jpg', edition: "Grounded, 2025" },
-      { label: 'Moments', src: 'images/img_5872.jpg', edition: "Grounded, 2025" },
-      { label: 'Moments', src: 'images/img_5900.jpg', edition: "Grounded, 2025" },
-      { label: 'Sessions', src: 'images/img_5908.jpg', edition: "Grounded, 2025" },
-      { label: 'Moments', src: 'images/img_6343.jpg', edition: "Grounded, 2025" },
-      { label: 'Moments', src: 'images/img_6397.jpg', edition: "Grounded, 2025" },
-      { label: 'Moments', src: 'images/img_6402.jpg', edition: "Grounded, 2025" },
-      { label: 'Creative Tracks', src: 'images/img_6419.jpg', edition: "Grounded, 2025" },
-      { label: 'Moments', src: 'images/img_6421.jpg', edition: "Grounded, 2025" },
-      { label: 'Camp Highlights', src: 'images/img_6460.jpg', edition: "Grounded, 2025" },
-      { label: 'Arrival & Check-in', src: 'images/img_5181.jpg', edition: "Grounded, 2025" },
-      { label: 'Moments', src: 'images/img_5183.jpg', edition: "Grounded, 2025" },
-      { label: 'Moments', src: 'images/img_5189.jpg', edition: "Grounded, 2025" },
-      { label: 'Teaching Session', src: 'images/img_5192.jpg', edition: "Grounded, 2025" },
-      { label: 'Games & Fun', src: 'images/img_5200.jpg', edition: "Grounded, 2025" },
-      { label: 'Small Groups', src: 'images/img_5209.jpg', edition: "Grounded, 2025" },
-      { label: 'Prayer Session', src: 'images/img_5210.jpg', edition: "Grounded, 2025" },
-      { label: 'Group Activities', src: 'images/img_5215.jpg', edition: "Grounded, 2025" },
-      { label: 'Crowd Energy', src: 'images/img_4745.jpg', edition: "Grounded, 2025" },
-      { label: 'Attendee Portrait', src: 'images/img_4767.jpg', edition: "Grounded, 2025" },
-      { label: 'Group Interaction', src: 'images/img_4771.jpg', edition: "Grounded, 2025" },
-      { label: 'Attentive Listener', src: 'images/img_4779.jpg', edition: "Grounded, 2025" },
-      { label: 'Seated Audience', src: 'images/img_4787.jpg', edition: "Grounded, 2025" },
-      { label: 'Event Atmosphere', src: 'images/img_4790.jpg', edition: "Grounded, 2025" },
-      { label: 'Speaker Moment', src: 'images/img_4806.jpg', edition: "Grounded, 2025" },
-      { label: 'Keynote Session', src: 'images/img_4868.jpg', edition: "Grounded, 2025" },
-      { label: 'Engaged Attendees', src: 'images/img_4881.jpg', edition: "Grounded, 2025" },
-      { label: 'Evening Crowd', src: 'images/img_4896.jpg', edition: "Grounded, 2025" },
-      { label: 'Networking Moment', src: 'images/img_4900.jpg', edition: "Grounded, 2025" },
-      { label: 'Stage Overview', src: 'images/img_4930.jpg', edition: "Grounded, 2025" },
+      // ===== Grounded, 2025 (30 images) =====
+      { label: 'Main Worship', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_6537.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_5872.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_5900.jpg', edition: "Grounded, 2025" },
+      { label: 'Sessions', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_5908.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_6343.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_6397.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_6402.jpg', edition: "Grounded, 2025" },
+      { label: 'Creative Tracks', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_6419.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_6421.jpg', edition: "Grounded, 2025" },
+      { label: 'Camp Highlights', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_6460.jpg', edition: "Grounded, 2025" },
+      { label: 'Arrival & Check-in', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_5181.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_5183.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_5189.jpg', edition: "Grounded, 2025" },
+      { label: 'Teaching Session', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_5192.jpg', edition: "Grounded, 2025" },
+      { label: 'Games & Fun', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_5200.jpg', edition: "Grounded, 2025" },
+      { label: 'Small Groups', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_5209.jpg', edition: "Grounded, 2025" },
+      { label: 'Prayer Session', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_5210.jpg', edition: "Grounded, 2025" },
+      { label: 'Group Activities', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_5215.jpg', edition: "Grounded, 2025" },
+      { label: 'Crowd Energy', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4745.jpg', edition: "Grounded, 2025" },
+      { label: 'Attendee Portrait', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4767.jpg', edition: "Grounded, 2025" },
+      { label: 'Group Interaction', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4771.jpg', edition: "Grounded, 2025" },
+      { label: 'Attentive Listener', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4779.jpg', edition: "Grounded, 2025" },
+      { label: 'Seated Audience', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4787.jpg', edition: "Grounded, 2025" },
+      { label: 'Event Atmosphere', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4790.jpg', edition: "Grounded, 2025" },
+      { label: 'Speaker Moment', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4806.jpg', edition: "Grounded, 2025" },
+      { label: 'Keynote Session', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4868.jpg', edition: "Grounded, 2025" },
+      { label: 'Engaged Attendees', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4881.jpg', edition: "Grounded, 2025" },
+      { label: 'Evening Crowd', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4896.jpg', edition: "Grounded, 2025" },
+      { label: 'Networking Moment', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4900.jpg', edition: "Grounded, 2025" },
+      { label: 'Stage Overview', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/IMG_4930.jpg', edition: "Grounded, 2025" },
 
       // ===== It's Time, 2023 (20 images) =====
-      { label: 'Check-in', src: 'images/_mg_0476.jpg', edition: "It's Time, 2023" },
-      { label: 'Moments', src: 'images/_mg_0477.jpg', edition: "It's Time, 2023" },
-      { label: 'Workshop', src: 'images/_mg_0487.jpg', edition: "It's Time, 2023" },
-      { label: 'Networking', src: 'images/_mg_0488.jpg', edition: "It's Time, 2023" },
-      { label: 'Discussion', src: 'images/_mg_0494.jpg', edition: "It's Time, 2023" },
-      { label: 'Community', src: 'images/_mg_0496.jpg', edition: "It's Time, 2023" },
-      { label: 'Group Photo', src: 'images/_mg_1285.jpg', edition: "It's Time, 2023" },
-      { label: 'Team', src: 'images/_mg_1286.jpg', edition: "It's Time, 2023" },
-      { label: 'Learning', src: 'images/_mg_1309.jpg', edition: "It's Time, 2023" },
-      { label: 'Audience', src: 'images/_mg_1310.jpg', edition: "It's Time, 2023" },
-      { label: 'Creative Session', src: 'images/_mg_1311.jpg', edition: "It's Time, 2023" },
-      { label: 'Workshop', src: 'images/_mg_1313.jpg', edition: "It's Time, 2023" },
-      { label: 'Speakers', src: 'images/_mg_1315.jpg', edition: "It's Time, 2023" },
-      { label: 'Collaboration', src: 'images/_mg_1316.jpg', edition: "It's Time, 2023" },
-      { label: 'Presentation', src: 'images/_mg_1319.jpg', edition: "It's Time, 2023" },
-      { label: 'Discussion', src: 'images/_mg_1320.jpg', edition: "It's Time, 2023" },
-      { label: 'Portrait', src: 'images/_mg_1321.jpg', edition: "It's Time, 2023" },
-      { label: 'Community', src: 'images/_mg_1328.jpg', edition: "It's Time, 2023" },
-      { label: 'Interaction', src: 'images/_mg_1331.jpg', edition: "It's Time, 2023" },
-      { label: 'Teaching', src: 'images/_mg_1334.jpg', edition: "It's Time, 2023" },
+      { label: 'Check-in', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_0476.jpg', edition: "It's Time, 2023" },
+      { label: 'Moments', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_0477.jpg', edition: "It's Time, 2023" },
+      { label: 'Workshop', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_0487.jpg', edition: "It's Time, 2023" },
+      { label: 'Networking', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_0488.jpg', edition: "It's Time, 2023" },
+      { label: 'Discussion', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_0494.jpg', edition: "It's Time, 2023" },
+      { label: 'Community', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_0496.jpg', edition: "It's Time, 2023" },
+      { label: 'Group Photo', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1285.jpg', edition: "It's Time, 2023" },
+      { label: 'Team', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1286.jpg', edition: "It's Time, 2023" },
+      { label: 'Learning', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1309.jpg', edition: "It's Time, 2023" },
+      { label: 'Audience', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1310.jpg', edition: "It's Time, 2023" },
+      { label: 'Creative Session', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1311.jpg', edition: "It's Time, 2023" },
+      { label: 'Workshop', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1313.jpg', edition: "It's Time, 2023" },
+      { label: 'Speakers', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1315.jpg', edition: "It's Time, 2023" },
+      { label: 'Collaboration', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1316.jpg', edition: "It's Time, 2023" },
+      { label: 'Presentation', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1319.jpg', edition: "It's Time, 2023" },
+      { label: 'Discussion', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1320.jpg', edition: "It's Time, 2023" },
+      { label: 'Portrait', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1321.jpg', edition: "It's Time, 2023" },
+      { label: 'Community', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1328.jpg', edition: "It's Time, 2023" },
+      { label: 'Interaction', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1331.jpg', edition: "It's Time, 2023" },
+      { label: 'Teaching', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_1334.jpg', edition: "It's Time, 2023" },
 
       // ===== Evolve, 2024 (30 images) =====
-      { label: 'Audience', src: 'images/_mg_2473.jpg', edition: "Evolve, 2024" },
-      { label: 'Check-in', src: 'images/_mg_2475.jpg', edition: "Evolve, 2024" },
-      { label: 'Speaker', src: 'images/_mg_2476.jpg', edition: "Evolve, 2024" },
-      { label: 'Presentation', src: 'images/_mg_2478.jpg', edition: "Evolve, 2024" },
-      { label: 'Discussion', src: 'images/_mg_2483.jpg', edition: "Evolve, 2024" },
-      { label: 'Audience', src: 'images/_mg_2484.jpg', edition: "Evolve, 2024" },
-      { label: 'Worship', src: 'images/_mg_2486.jpg', edition: "Evolve, 2024" },
-      { label: 'Praise', src: 'images/_mg_2487.jpg', edition: "Evolve, 2024" },
-      { label: 'Moments', src: 'images/_mg_2490.jpg', edition: "Evolve, 2024" },
-      { label: 'Community', src: 'images/_mg_2493.jpg', edition: "Evolve, 2024" },
-      { label: 'Engagement', src: 'images/_mg_2495.jpg', edition: "Evolve, 2024" },
-      { label: 'Audience', src: 'images/_mg_2497.jpg', edition: "Evolve, 2024" },
-      { label: 'Learning', src: 'images/_mg_2500.jpg', edition: "Evolve, 2024" },
-      { label: 'Discussion', src: 'images/_mg_2502.jpg', edition: "Evolve, 2024" },
-      { label: 'Celebration', src: 'images/_mg_2510.jpg', edition: "Evolve, 2024" },
-      { label: 'Speaker', src: 'images/_mg_2511.jpg', edition: "Evolve, 2024" },
-      { label: 'Panel', src: 'images/_mg_2518.jpg', edition: "Evolve, 2024" },
-      { label: 'Conversation', src: 'images/_mg_2541.jpg', edition: "Evolve, 2024" },
-      { label: 'Portrait', src: 'images/_mg_2549.jpg', edition: "Evolve, 2024" },
-      { label: 'Session', src: 'images/_mg_2556.jpg', edition: "Evolve, 2024" },
-      { label: 'Panel', src: 'images/_mg_2566.jpg', edition: "Evolve, 2024" },
-      { label: 'Discussion', src: 'images/_mg_2568.jpg', edition: "Evolve, 2024" },
-      { label: 'Moments', src: 'images/_mg_2576.jpg', edition: "Evolve, 2024" },
-      { label: 'Portrait', src: 'images/_mg_2581.jpg', edition: "Evolve, 2024" },
-      { label: 'Speaker', src: 'images/_mg_2582.jpg', edition: "Evolve, 2024" },
-      { label: 'Volunteer', src: 'images/_mg_2587.jpg', edition: "Evolve, 2024" },
-      { label: 'Group Photo', src: 'images/_mg_2590.jpg', edition: "Evolve, 2024" },
-      { label: 'Team', src: 'images/_mg_2592.jpg', edition: "Evolve, 2024" },
-      { label: 'Basketball', src: 'images/_mg_2641.jpg', edition: "Evolve, 2024" },
-      { label: 'Community', src: 'images/_mg_2644.jpg', edition: "Evolve, 2024" }
+      { label: 'Audience', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2473.jpg', edition: "Evolve, 2024" },
+      { label: 'Check-in', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2475.jpg', edition: "Evolve, 2024" },
+      { label: 'Speaker', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2476.jpg', edition: "Evolve, 2024" },
+      { label: 'Presentation', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2478.jpg', edition: "Evolve, 2024" },
+      { label: 'Discussion', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2483.jpg', edition: "Evolve, 2024" },
+      { label: 'Audience', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2484.jpg', edition: "Evolve, 2024" },
+      { label: 'Worship', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2486.jpg', edition: "Evolve, 2024" },
+      { label: 'Praise', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2487.jpg', edition: "Evolve, 2024" },
+      { label: 'Moments', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2490.jpg', edition: "Evolve, 2024" },
+      { label: 'Community', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2493.jpg', edition: "Evolve, 2024" },
+      { label: 'Engagement', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2495.jpg', edition: "Evolve, 2024" },
+      { label: 'Audience', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2497.jpg', edition: "Evolve, 2024" },
+      { label: 'Learning', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2500.jpg', edition: "Evolve, 2024" },
+      { label: 'Discussion', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2502.jpg', edition: "Evolve, 2024" },
+      { label: 'Celebration', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2510.jpg', edition: "Evolve, 2024" },
+      { label: 'Speaker', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2511.jpg', edition: "Evolve, 2024" },
+      { label: 'Panel', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2518.jpg', edition: "Evolve, 2024" },
+      { label: 'Conversation', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2541.jpg', edition: "Evolve, 2024" },
+      { label: 'Portrait', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2549.jpg', edition: "Evolve, 2024" },
+      { label: 'Session', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2556.jpg', edition: "Evolve, 2024" },
+      { label: 'Panel', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2566.jpg', edition: "Evolve, 2024" },
+      { label: 'Discussion', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2568.jpg', edition: "Evolve, 2024" },
+      { label: 'Moments', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2576.jpg', edition: "Evolve, 2024" },
+      { label: 'Portrait', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2581.jpg', edition: "Evolve, 2024" },
+      { label: 'Speaker', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2582.jpg', edition: "Evolve, 2024" },
+      { label: 'Volunteer', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2587.jpg', edition: "Evolve, 2024" },
+      { label: 'Group Photo', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2590.jpg', edition: "Evolve, 2024" },
+      { label: 'Team', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2592.jpg', edition: "Evolve, 2024" },
+      { label: 'Basketball', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2641.jpg', edition: "Evolve, 2024" },
+      { label: 'Community', src: 'https://res.cloudinary.com/mijmkfdo/image/upload/_MG_2644.jpg', edition: "Evolve, 2024" }
     ];
 
-    // ---- Render function ----
+    // ---- Render function (with skeleton) ----
     function renderGallery(edition) {
       var grid = document.getElementById('galleryGrid');
       if (!grid) return;
@@ -424,28 +490,42 @@
         item.className = 'gallery-item';
         item.dataset.index = index;
 
+        // ---- Skeleton loader ----
+        var skeleton = document.createElement('div');
+        skeleton.className = 'skeleton';
+        item.appendChild(skeleton);
+
+        // ---- Image ----
         var img = document.createElement('img');
         img.src = photo.src;
         img.alt = photo.label;
         img.loading = 'lazy';
+        img.onload = function() {
+          skeleton.classList.add('hidden');
+          img.classList.add('loaded');
+        };
         img.onerror = function() {
+          skeleton.classList.add('hidden');
           this.style.display = 'none';
           var fb = item.querySelector('.placeholder-fallback');
           if (fb) fb.style.display = 'flex';
         };
         item.appendChild(img);
 
+        // ---- Fallback (if image fails) ----
         var fallback = document.createElement('div');
         fallback.className = 'placeholder-content placeholder-fallback';
         fallback.style.display = 'none';
         fallback.innerHTML = '<svg viewBox="0 0 24 24" width="28" height="28"><rect x="2" y="3" width="20" height="16" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/><path d="M21 15l-5-5L5 21" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>JT Camp</span>';
         item.appendChild(fallback);
 
+        // ---- Edition tag ----
         var tag = document.createElement('span');
         tag.className = 'edition-tag';
         tag.textContent = photo.edition || 'Moments';
         item.appendChild(tag);
 
+        // ---- Click to open lightbox ----
         item.addEventListener('click', function() {
           var idx = parseInt(this.dataset.index);
           openLightbox(idx);
