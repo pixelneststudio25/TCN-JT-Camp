@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" shape-rendering="geometricPrecision">
+
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Black background -->
+  <circle cx="50" cy="50" r="50" fill="#0a0a0a"/>
+
+  <!-- White ring -->
+  <circle cx="50" cy="50" r="40" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+
+  <!-- JT in Montserrat Black -->
+  <text
+    x="50"
+    y="63"
+    font-family="'Montserrat', sans-serif"
+    font-weight="200"
+    font-size="40"
+    fill="#ffffff"
+    text-anchor="middle"
+    letter-spacing="2"
+  >JT</text>
+
+</svg>
