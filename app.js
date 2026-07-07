@@ -576,7 +576,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initReveal();
   startCountdown();
   initFaq();
-  initGallery();
+  //initGallery();
   initTestimonials();
   initMobileCta();
   initLightboxSwipe();
