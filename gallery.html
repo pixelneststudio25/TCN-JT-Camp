@@ -33,22 +33,13 @@
   <link rel="stylesheet" href="style.css" />
 
   <style>
-    /* ---- Gallery Grid (overrides for full page) ---- */
+    /* ---- Gallery Grid Wrap (no inner scrollbar — the page scrolls naturally) ---- */
+    /* explicitly overriding max-height/overflow-y set on this same class in style.css */
     .gallery-grid-wrap {
-      max-height: 800px;
-      overflow-y: auto;
-      padding-right: 8px;
-      scrollbar-width: thin;
-      scrollbar-color: var(--gold) var(--bg-700);
-    }
-    .gallery-grid-wrap::-webkit-scrollbar {
-      width: 6px;
-      background: var(--bg-700);
-      border-radius: 10px;
-    }
-    .gallery-grid-wrap::-webkit-scrollbar-thumb {
-      background: var(--gold);
-      border-radius: 10px;
+      max-height: none !important;
+      overflow: visible !important;
+      overflow-y: visible !important;
+      padding-right: 0 !important;
     }
 
     .gallery-grid {
@@ -146,13 +137,81 @@
       background: rgba(202,165,60,0.2);
     }
 
-    /* ---- Filter Buttons ---- */
+    /* ---- Sticky filter bar (glues below the navbar while photos scroll) ---- */
+    .gallery-filter-sticky {
+      position: sticky;
+      top: 0; /* set precisely via JS to match navbar height */
+      z-index: 40;
+      background: var(--bg-deep);
+      padding: 16px 0 12px;
+      margin-bottom: 8px;
+      transition: box-shadow 0.25s ease, border-color 0.25s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    .gallery-filter-sticky.stuck {
+      box-shadow: 0 12px 24px rgba(0,0,0,0.35);
+      border-bottom-color: var(--line);
+    }
+
+    .gallery-filter-sticky .gallery-filters,
+    .gallery-filter-sticky .gallery-filter-select-wrap {
+      margin-bottom: 0;
+    }
+
+    #filterSentinel {
+      height: 1px;
+    }
+
+    /* ---- Filter Buttons (desktop) ---- */
     .gallery-filters {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
       justify-content: center;
       margin-bottom: 32px;
+    }
+
+    /* ---- Filter dropdown (mobile) ---- */
+    .gallery-filter-select-wrap {
+      display: none;
+      position: relative;
+      max-width: 320px;
+      margin: 0 auto 28px;
+    }
+
+    .gallery-filter-select {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      background: transparent;
+      color: var(--text-soft);
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 12px 40px 12px 20px;
+      border-radius: 100px;
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+    }
+
+    .gallery-filter-select:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .gallery-filter-select option {
+      background: var(--bg-700);
+      color: var(--text);
+    }
+
+    .gallery-filter-select-chevron {
+      position: absolute;
+      top: 50%;
+      right: 18px;
+      transform: translateY(-50%);
+      color: var(--gold);
+      pointer-events: none;
     }
 
     .filter-btn {
@@ -353,7 +412,8 @@
     }
     @media (max-width: 680px) {
       .gallery-grid .gallery-item { flex: 0 0 calc(50% - 14px); min-width: unset; }
-      .filter-btn { padding: 8px 16px; font-size: 0.75rem; }
+      .gallery-filters-desktop { display: none; }
+      .gallery-filter-select-wrap { display: block; }
       .lightbox-content { padding: 0 44px; }
       .lightbox-btn {
         width: 40px;
@@ -368,6 +428,13 @@
         font-size: 22px;
       }
       .lightbox-counter { bottom: 16px; font-size: 0.8rem; padding: 6px 14px; }
+
+      /* ---- Compact header on mobile ---- */
+      .section[style*="padding-top:100px"] { padding-top: 76px !important; }
+      .section-head.reveal { margin-bottom: 20px; }
+      .section-head .eyebrow { font-size: 0.7rem; margin-bottom: 6px; }
+      .section-head h2 { font-size: 1.6rem; line-height: 1.2; margin-bottom: 8px; }
+      .section-head p { font-size: 0.85rem; line-height: 1.4; }
     }
     @media (max-width: 420px) {
       .gallery-grid .gallery-item { flex: 0 0 calc(100% - 14px); }
@@ -461,16 +528,32 @@
         <p>Browse through all the moments from our past camps — click any image to preview.</p>
       </div>
 
-      <!-- FILTERS -->
-      <div class="gallery-filters reveal">
-        <button class="filter-btn active" data-edition="all">All Editions</button>
-        <button class="filter-btn" data-edition="It's Time, 2023">It's Time · 2023</button>
-        <button class="filter-btn" data-edition="Evolve, 2024">Evolve · 2024</button>
-        <button class="filter-btn" data-edition="Grounded, 2025">Grounded · 2025</button>
+      <!-- Sentinel used to detect when the filter bar becomes stuck -->
+      <div id="filterSentinel"></div>
+
+      <div class="gallery-filter-sticky" id="galleryFilterSticky">
+        <!-- FILTERS -->
+        <div class="gallery-filters gallery-filters-desktop reveal">
+          <button class="filter-btn active" data-edition="all">All Editions</button>
+          <button class="filter-btn" data-edition="It's Time, 2023">It's Time · 2023</button>
+          <button class="filter-btn" data-edition="Evolve, 2024">Evolve · 2024</button>
+          <button class="filter-btn" data-edition="Grounded, 2025">Grounded · 2025</button>
+        </div>
+
+        <!-- Mobile filter dropdown -->
+        <div class="gallery-filter-select-wrap reveal">
+          <select class="gallery-filter-select" id="galleryFilterSelect" aria-label="Filter photos by edition">
+            <option value="all">All Editions</option>
+            <option value="It's Time, 2023">It's Time · 2023</option>
+            <option value="Evolve, 2024">Evolve · 2024</option>
+            <option value="Grounded, 2025">Grounded · 2025</option>
+          </select>
+          <svg class="gallery-filter-select-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
       </div>
 
       <!-- GRID -->
-      <div class="gallery-grid-wrap reveal">
+      <div class="gallery-grid-wrap">
         <div class="gallery-grid" id="galleryGrid">
           <!-- Populated by JS -->
         </div>
@@ -711,15 +794,31 @@
       window._filteredPhotos = filteredPhotos;
     }
 
-    // ---- Filter buttons ----
+    // ---- Filters: desktop buttons + mobile dropdown, kept in sync ----
     var btns = document.querySelectorAll('.filter-btn');
+    var filterSelect = document.getElementById('galleryFilterSelect');
+
+    function applyFilter(edition) {
+      btns.forEach(function(b) {
+        b.classList.toggle('active', b.dataset.edition === edition);
+      });
+      if (filterSelect && filterSelect.value !== edition) {
+        filterSelect.value = edition;
+      }
+      renderGallery(edition);
+    }
+
     btns.forEach(function(btn) {
       btn.addEventListener('click', function() {
-        btns.forEach(function(b) { b.classList.remove('active'); });
-        this.classList.add('active');
-        renderGallery(this.dataset.edition);
+        applyFilter(this.dataset.edition);
       });
     });
+
+    if (filterSelect) {
+      filterSelect.addEventListener('change', function() {
+        applyFilter(this.value);
+      });
+    }
 
     // ---- Clicking tag filters ----
     document.getElementById('galleryGrid').addEventListener('click', function(e) {
@@ -727,17 +826,15 @@
       if (tag) {
         e.stopPropagation();
         var edition = tag.textContent.trim();
-        var btns = document.querySelectorAll('.filter-btn');
-        btns.forEach(function(btn) {
-          if (btn.dataset.edition === edition || btn.textContent.trim() === edition) {
-            btn.click();
-          }
+        var match = Array.prototype.find.call(btns, function(btn) {
+          return btn.dataset.edition === edition || btn.textContent.trim() === edition;
         });
+        applyFilter(match ? match.dataset.edition : edition);
       }
     });
 
     // ---- Initial render ----
-    renderGallery('all');
+    applyFilter('all');
 
     // ============================================================
     //  LIGHTBOX — single-image stage, pixel-based (no % drift bugs)
@@ -906,6 +1003,45 @@
     document.addEventListener('mousemove', function(e) { dragMove(e.clientX); });
     document.addEventListener('mouseup', dragEnd);
 
+    // ---- Sticky filter bar: sit exactly below the navbar, at any screen size ----
+    var navEl = document.getElementById('nav');
+    var stickyBar = document.getElementById('galleryFilterSticky');
+    var filterSentinel = document.getElementById('filterSentinel');
+    var stuckObserver = null;
+
+    function updateStickyOffset() {
+      if (!navEl || !stickyBar) return;
+      stickyBar.style.top = navEl.offsetHeight + 'px';
+    }
+
+    function setupStuckObserver() {
+      if (!stickyBar || !filterSentinel || !('IntersectionObserver' in window)) return;
+      if (stuckObserver) stuckObserver.disconnect();
+      var navHeight = navEl ? navEl.offsetHeight : 0;
+      stuckObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          stickyBar.classList.toggle('stuck', !entry.isIntersecting);
+        });
+      }, { threshold: 0, rootMargin: '-' + (navHeight + 1) + 'px 0px 0px 0px' });
+      stuckObserver.observe(filterSentinel);
+    }
+
+    updateStickyOffset();
+    setupStuckObserver();
+
+    var stickyResizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(stickyResizeTimer);
+      stickyResizeTimer = setTimeout(function() {
+        updateStickyOffset();
+        setupStuckObserver();
+      }, 150);
+    });
+    window.addEventListener('orientationchange', function() {
+      updateStickyOffset();
+      setupStuckObserver();
+    });
+
     // ---- Scroll reveal (simple) ----
     var reveals = document.querySelectorAll('.reveal');
     if ('IntersectionObserver' in window) {
@@ -916,7 +1052,7 @@
             obs.unobserve(e.target);
           }
         });
-      }, { threshold: 0.1 });
+      }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
       reveals.forEach(function(r) { obs.observe(r); });
     } else {
       reveals.forEach(function(r) { r.classList.add('visible'); });
