@@ -17,7 +17,7 @@
   <meta property="og:url" content="https://pixelneststudio25.github.io/TCN-JT-Camp/requirements" />
   <meta property="og:image" content="https://pixelneststudio25.github.io/TCN-JT-Camp/jt.png" />
   <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:site_name" content="Jesus Tribe Camp — TCN Abuja" />
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -31,320 +31,875 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="manifest" href="site.webmanifest">
 
-  <!-- PDF.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
-  <!-- Main styles -->
+  <!-- Main styles (shared) -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Page‑specific styles -->
   <style>
-    /* ---- PDF Viewer Wrapper ---- */
-    .pdf-viewer-wrapper {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 12px;
+    /* ============================================================
+       REQUIREMENTS PAGE – PREMIUM EDITORIAL STYLES
+       ============================================================ */
+
+    /* ---- Global font override ---- */
+    html, body, button, input, textarea {
+      font-family: 'Montserrat', sans-serif;
     }
 
-    /* ---- Controls ---- */
-    .pdf-controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 10px 18px;
-      margin-bottom: 14px;
-      border-radius: var(--radius-sm);
-      flex-wrap: wrap;
+    /* ---- Reduced motion respect ---- */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* ---- Focus visibility (accessibility) ---- */
+    .gender-btn:focus-visible,
+    .nav-pill:focus-visible,
+    .gender-toggle-pill button:focus-visible,
+    .checklist-item:focus-visible,
+    .download-pdf-btn:focus-visible,
+    .change-gender-pill:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    /* ---- Typography ---- */
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.25rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 4px;
+    }
+
+    .gold-underline {
+      display: inline-block;
+      position: relative;
+    }
+    .gold-underline::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 60px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 4px;
+    }
+
+    /* ---- Top scroll progress bar ---- */
+    .scroll-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: var(--gold);
+      z-index: 200;
+      transition: width 0.1s linear;
+    }
+
+    /* ---- Staggered Cards ---- */
+    :root {
+      --nav-height: 64px; /* overwritten by JS to match the sticky nav's real, current height */
+    }
+
+    .req-card {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
       backdrop-filter: blur(var(--glass-blur));
       -webkit-backdrop-filter: blur(var(--glass-blur));
+      padding: 32px 28px;
+      margin-bottom: 28px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: cardReveal 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      scroll-margin-top: calc(var(--nav-height) + 16px);
     }
 
-    .ctrl-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-soft);
+    .req-card:hover {
+      border-color: rgba(202, 165, 60, 0.3);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .req-card:nth-child(1) { animation-delay: 0.05s; }
+    .req-card:nth-child(2) { animation-delay: 0.15s; }
+    .req-card:nth-child(3) { animation-delay: 0.25s; }
+    .req-card:nth-child(4) { animation-delay: 0.35s; }
+    .req-card:nth-child(5) { animation-delay: 0.45s; }
+    .req-card:nth-child(6) { animation-delay: 0.55s; }
+
+    @keyframes cardReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    section[data-section] {
+      scroll-margin-top: calc(var(--nav-height) + 16px);
+    }
+
+    /* push page content below the sticky nav by its real, current height */
+    #mainContent > .container {
+      padding-top: calc(var(--nav-height) + 24px);
+    }
+
+    .req-card h3 {
       font-size: 1.4rem;
-      font-weight: 300;
-      padding: 4px 10px;
-      cursor: pointer;
-      transition: color 0.2s ease, transform 0.2s ease, background 0.2s ease;
-      font-family: inherit;
-      line-height: 1;
-      border-radius: 6px;
-      min-width: 36px;
-      text-align: center;
-    }
-
-    .ctrl-btn:hover {
+      font-weight: 700;
       color: var(--gold);
-      transform: scale(1.12);
-      background: rgba(202, 165, 60, 0.08);
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .ctrl-btn:active {
-      transform: scale(0.92);
+    .item-count {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      padding: 3px 10px;
+      border-radius: 100px;
+      text-transform: uppercase;
     }
 
-    .ctrl-divider {
-      width: 1px;
-      height: 26px;
-      background: var(--glass-border);
-      flex-shrink: 0;
-    }
-
-    .page-indicator,
-    .zoom-indicator {
-      color: var(--text-soft);
+    .req-card h4 {
+      font-size: 1.05rem;
       font-weight: 600;
-      font-size: 0.85rem;
-      min-width: 55px;
+      color: var(--text);
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .req-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .req-card ul li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      color: var(--text-soft);
+      font-weight: 400;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .req-card ul li[data-gender] {
+      transition: opacity 0.25s ease;
+    }
+
+    .req-card ul li[data-gender].gender-hidden {
+      display: none;
+    }
+
+    .req-card ul li .bullet {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 6px rgba(202, 165, 60, 0.5);
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+
+    .req-card .highlight-box {
+      background: rgba(202, 165, 60, 0.06);
+      border-left: 3px solid var(--gold);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+
+    .req-card .highlight-box p {
+      color: var(--text-soft);
+      font-weight: 400;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Pull Quote (Editorial) ---- */
+    .pull-quote {
+      background: linear-gradient(135deg, rgba(202, 165, 60, 0.08), rgba(202, 165, 60, 0.02));
+      border: 1px solid rgba(202, 165, 60, 0.15);
+      border-radius: var(--radius-sm);
+      padding: 24px 28px;
+      margin: 20px 0 8px;
       text-align: center;
-      font-variant-numeric: tabular-nums;
+    }
+
+    .pull-quote p {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--text);
       letter-spacing: 0.3px;
     }
 
-    .zoom-indicator {
-      min-width: 45px;
+    .pull-quote .source {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 6px;
     }
 
-    /* ---- Canvas Container ---- */
-    .pdf-canvas-container {
-      position: relative;
-      padding: 16px;
-      border-radius: var(--radius);
-      min-height: 480px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-800);
+    /* ---- Gender Gateway (Improved) ---- */
+    #genderGateway {
+      max-width: 600px;
+      margin: 0 auto 40px;
+      padding-top: 120px;
+      padding-bottom: 40px;
+    }
+
+    #genderGateway .gateway-card {
+      background: var(--glass-bg);
       border: 1px solid var(--glass-border);
-      overflow: hidden;
-      touch-action: pan-y; /* allows vertical scroll but captures horizontal */
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      user-select: none;
+      border-radius: var(--radius);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      padding: 40px 32px;
+      text-align: center;
+      transition: border-color 0.3s ease;
     }
 
-    #pdfCanvas {
-      display: block;
-      max-width: 100%;
-      max-height: 82vh;
-      height: auto;
-      width: auto;
-      border-radius: 4px;
-      background: var(--bg-900);
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
-      transition: transform 0.2s ease;
-      image-rendering: auto;
+    #genderGateway .gateway-card h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
     }
 
-    /* ---- Loading state ---- */
-    .pdf-loading {
-      position: absolute;
+    #genderGateway .gateway-card .sub {
       color: var(--text-muted);
-      font-weight: 500;
-      letter-spacing: 1px;
       font-size: 1rem;
-      animation: pulseText 1.8s ease-in-out infinite;
-      pointer-events: none;
+      margin-bottom: 28px;
     }
 
-    @keyframes pulseText {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
+    .gender-options {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    .pdf-loading.hidden {
-      display: none;
+    .gender-btn {
+      flex: 1;
+      min-width: 160px;
+      padding: 32px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+      text-align: center;
+      user-select: none;
+      font-family: inherit;
     }
 
-    /* ---- Swipe CTA (mobile) ---- */
-    .swipe-cta {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: none;
-      align-items: center;
-      gap: 12px;
-      color: var(--text-muted);
-      font-size: 0.7rem;
-      font-weight: 600;
+    .gender-btn:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+      box-shadow: 0 16px 40px rgba(202, 165, 60, 0.12);
+    }
+
+    .gender-btn:active {
+      transform: scale(0.96);
+    }
+
+    .gender-btn .symbol {
+      display: block;
+      font-size: 3.6rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .gender-btn .label {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 700;
       letter-spacing: 2px;
       text-transform: uppercase;
-      background: rgba(6, 8, 14, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 8px 18px;
-      border-radius: 100px;
-      border: 1px solid var(--glass-border);
-      pointer-events: none;
+      color: var(--text);
+    }
+
+    .gender-btn .desc {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    /* ---- Hide original site nav ---- */
+    #nav.hidden-nav {
+      transform: translateY(-100%);
       opacity: 0;
-      transition: opacity 0.6s ease;
-      z-index: 5;
+      pointer-events: none;
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease;
     }
 
-    .swipe-cta.show {
-      display: flex;
+    /* ---- Sticky Nav (becomes main nav after gateway) ---- */
+    .sticky-nav {
+      position: fixed;
+      top: -80px;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(6, 8, 14, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 0;
+      transition: top 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .sticky-nav.visible {
+      top: 0;
       opacity: 1;
+      pointer-events: auto;
     }
 
-    .swipe-cta .arrow {
-      display: inline-block;
-      animation: swipeArrow 1.8s ease-in-out infinite;
-      font-size: 1.2rem;
-      line-height: 1;
+    .sticky-nav .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Brand + pill strip share one row and can shrink/scroll together;
+       switch+progress stay grouped as a second, self-contained unit. */
+    .nav-row-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .sticky-nav .nav-inner { order: unset; }
+    .nav-row-top { order: 1; }
+    .nav-meta { order: 2; }
+
+    /* Pills live in their own horizontally-scrollable strip so 5 of them
+       never have to fight for space or wrap awkwardly on narrow phones. */
+    .nav-pills-scroll {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-pills-scroll::-webkit-scrollbar { display: none; }
+
+    .nav-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    /* ---- Brand in sticky nav ---- */
+    .sticky-brand {
+      display: none;
+      flex-shrink: 0;
+    }
+
+    .sticky-brand .nav-brand {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Give the mark a bit of presence: a thin gold ring + soft glow,
+       and a touch-friendly minimum size regardless of the inline style
+       passed on the element. */
+    .sticky-brand .nav-logo {
+      border-radius: 50%;
+      border: 1.5px solid rgba(202, 165, 60, 0.35);
+      box-shadow: 0 0 10px rgba(202, 165, 60, 0.15);
+      padding: 3px;
+      box-sizing: border-box;
+      min-width: 34px;
+      min-height: 34px;
+    }
+
+    .sticky-brand .nav-brand-text {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    .sticky-brand .nav-brand-text small {
+      display: block;
+      font-size: 0.5rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ---- Change-gender pill (in sticky nav) ---- */
+    .change-gender-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      color: var(--text-soft);
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: inherit;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .change-gender-pill:hover {
+      border-color: var(--gold);
       color: var(--gold);
     }
 
-    .swipe-cta .arrow:first-child {
-      animation-delay: 0s;
-    }
-    .swipe-cta .arrow:last-child {
-      animation-delay: 0.3s;
-    }
-
-    @keyframes swipeArrow {
-      0%, 100% { transform: translateX(0); opacity: 0.4; }
-      50% { transform: translateX(8px); opacity: 1; }
+    /* ---- Nav pills ---- */
+    .nav-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: nowrap;
+      width: max-content;
     }
 
-    /* ---- Custom Scrollbar ---- */
-    .pdf-canvas-container::-webkit-scrollbar {
-      width: 5px;
-      background: var(--bg-700);
-      border-radius: 10px;
+    .nav-pill {
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: inherit;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
-    .pdf-canvas-container::-webkit-scrollbar-thumb {
+
+    .nav-pill:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .nav-pill.active {
+      color: var(--bg-deep);
       background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 4px 16px rgba(202, 165, 60, 0.25);
+    }
+
+    .nav-pill .pill-check {
+      font-size: 0.7rem;
+      display: none;
+    }
+
+    .nav-pill.section-complete .pill-check {
+      display: inline;
+    }
+
+    /* ---- Progress ---- */
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .progress-circle {
+      position: relative;
+      width: 44px;
+      height: 44px;
+    }
+
+    .progress-circle svg {
+      transform: rotate(-90deg);
+      width: 44px;
+      height: 44px;
+    }
+
+    .progress-circle .bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.06);
+      stroke-width: 3;
+    }
+
+    .progress-circle .fg {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 3;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.3s ease;
+    }
+
+    .progress-circle .percent {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--text-soft);
+    }
+
+    /* ---- Gender Toggle (sticky inside dress code) ---- */
+    .gender-toggle-pill {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 100px;
+      padding: 4px;
+      margin-bottom: 20px;
+      gap: 4px;
+    }
+
+    .gender-toggle-pill button {
+      padding: 8px 24px;
+      border: none;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .gender-toggle-pill button.active {
+      background: var(--gold);
+      color: var(--bg-deep);
+      box-shadow: 0 4px 16px rgba(202, 165, 60, 0.3);
+    }
+
+    .gender-toggle-pill button:hover:not(.active) {
+      color: var(--text);
+    }
+
+    /* ---- Interactive Checklist ---- */
+    .checklist-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.02);
       border-radius: 10px;
+      border: 1px solid transparent;
+      transition: background 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .checklist-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .checklist-item.checked {
+      background: rgba(202, 165, 60, 0.05);
+      border-color: rgba(202, 165, 60, 0.15);
+    }
+
+    .checklist-item .box {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+      background: transparent;
+    }
+
+    .checklist-item .box svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .checklist-item.checked .box {
+      border-color: var(--gold);
+      background: var(--gold);
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(202, 165, 60, 0.25);
+    }
+
+    .checklist-item.checked .box svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .checklist-item .text {
+      color: var(--text-soft);
+      font-weight: 400;
+      font-size: 0.92rem;
+      transition: color 0.3s ease;
+    }
+
+    .checklist-item.checked .text {
+      color: var(--text-muted);
+    }
+
+    .checklist-counter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      background: rgba(202, 165, 60, 0.08);
+      border: 1px solid rgba(202, 165, 60, 0.12);
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .checklist-counter .num {
+      font-size: 1.1rem;
+    }
+
+    .checklist-counter.complete {
+      background: rgba(46, 204, 113, 0.12);
+      border-color: rgba(46, 204, 113, 0.2);
+      color: #2ecc71;
+      animation: pulseComplete 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulseComplete {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.2); }
+      50% { box-shadow: 0 0 20px 4px rgba(46, 204, 113, 0.1); }
+    }
+
+    /* ---- Download Button ---- */
+    .download-pdf-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      border-radius: 100px;
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      color: var(--text-soft);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      text-decoration: none;
+    }
+
+    .download-pdf-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(202, 165, 60, 0.1);
+    }
+
+    .download-pdf-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
     }
 
     /* ---- Responsive ---- */
     @media (max-width: 900px) {
-      .pdf-viewer-wrapper {
-        padding: 0 8px;
+      .sticky-nav {
+        padding: 8px 0;
       }
-      .pdf-canvas-container {
-        padding: 12px;
-        min-height: 380px;
-        border-radius: var(--radius-sm);
+      .nav-pill {
+        font-size: 0.7rem;
+        padding: 4px 12px;
       }
-      #pdfCanvas {
-        max-height: 78vh;
+      .progress-wrap .label {
+        display: none;
       }
-      .swipe-cta {
-        bottom: 20px;
-        font-size: 0.6rem;
-        padding: 6px 14px;
-        gap: 8px;
+      .sticky-brand .nav-brand-text {
+        font-size: 0.7rem;
+      }
+      .sticky-brand .nav-brand-text small {
+        font-size: 0.45rem;
+      }
+      .gender-btn {
+        min-width: 140px;
+        padding: 28px 16px;
+      }
+    }
+
+    /* Below this, the wordmark competes too hard with the pill strip for
+       space — drop to icon-only and let the pills breathe. The logo stays
+       a real, tappable link either way. */
+    @media (max-width: 560px) {
+      .sticky-brand .nav-brand-text {
+        display: none;
+      }
+      .sticky-brand .nav-logo {
+        width: 34px !important;
+        height: 34px !important;
       }
     }
 
     @media (max-width: 680px) {
-      .pdf-viewer-wrapper {
-        padding: 0 4px;
+      .sticky-nav .nav-inner {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
       }
-      .pdf-controls {
-        gap: 6px;
-        padding: 8px 10px;
-        border-radius: 10px;
+      .nav-row-top {
+        width: 100%;
       }
-      .ctrl-btn {
-        font-size: 1.1rem;
-        padding: 2px 6px;
-        min-width: 30px;
+      .nav-pills-scroll {
+        width: 100%;
       }
-      .page-indicator,
-      .zoom-indicator {
-        font-size: 0.7rem;
-        min-width: 35px;
+      .nav-pills {
+        justify-content: flex-start;
       }
-      .pdf-canvas-container {
-        padding: 6px;
-        min-height: 320px;
-        border-radius: 10px;
+      .nav-meta {
+        justify-content: center;
+        width: 100%;
       }
-      #pdfCanvas {
-        max-height: 72vh;
+      .sticky-nav {
+        padding: 10px 0;
       }
-      .ctrl-divider {
-        height: 20px;
+      .nav-pill {
+        font-size: 0.65rem;
+        padding: 3px 10px;
       }
-      .swipe-cta {
-        bottom: 14px;
-        font-size: 0.55rem;
-        padding: 5px 12px;
-        gap: 6px;
+      #genderGateway {
+        padding-top: 100px;
       }
-      .swipe-cta .arrow {
+      #genderGateway .gateway-card {
+        padding: 28px 20px;
+      }
+      .gender-options {
+        flex-direction: column;
+        gap: 12px;
+      }
+      .gender-btn {
+        min-width: unset;
+        padding: 20px;
+      }
+      .gender-btn .symbol {
+        font-size: 2.8rem;
+      }
+      .req-card {
+        padding: 24px 18px;
+        border-radius: var(--radius-sm);
+      }
+      .req-card h3 {
+        font-size: 1.2rem;
+      }
+      .gender-toggle-pill button {
+        padding: 6px 16px;
+        font-size: 0.75rem;
+      }
+      .pull-quote {
+        padding: 16px 18px;
+      }
+      .pull-quote p {
         font-size: 1rem;
+      }
+      .checklist-item {
+        padding: 8px 12px;
+      }
+      .checklist-item .text {
+        font-size: 0.85rem;
       }
     }
 
     @media (max-width: 420px) {
-      .pdf-canvas-container {
-        padding: 4px;
-        min-height: 260px;
+      .gender-btn {
+        padding: 16px;
       }
-      .pdf-controls {
-        gap: 4px;
-        padding: 6px 8px;
+      .gender-btn .symbol {
+        font-size: 2.2rem;
       }
-      .ctrl-btn {
-        font-size: 1rem;
-        padding: 2px 4px;
-        min-width: 26px;
+      .req-card {
+        padding: 18px 14px;
       }
-      .page-indicator,
-      .zoom-indicator {
+      .nav-pill {
+        font-size: 0.6rem;
+        padding: 2px 8px;
+      }
+      .nav-meta {
+        flex-wrap: wrap;
+        row-gap: 6px;
+      }
+      .sticky-brand .nav-brand-text {
         font-size: 0.65rem;
-        min-width: 30px;
       }
-      #pdfCanvas {
-        max-height: 68vh;
-      }
-    }
-
-    /* ---- Desktop: wider display ---- */
-    @media (min-width: 1200px) {
-      .pdf-viewer-wrapper {
-        padding: 0 20px;
-      }
-      .pdf-canvas-container {
-        padding: 24px;
-        min-height: 600px;
-      }
-      #pdfCanvas {
-        max-height: 84vh;
-        max-width: 1100px;
+      .sticky-brand .nav-logo {
+        width: 26px !important;
+        height: 26px !important;
       }
     }
 
-    /* ---- Touch device refinements ---- */
-    @media (hover: none) and (pointer: coarse) {
-      .ctrl-btn:hover {
-        transform: none;
-        background: transparent;
-      }
-      .ctrl-btn:active {
-        transform: scale(0.92);
-        background: rgba(202, 165, 60, 0.12);
-      }
+    /* ---- Print styles ---- */
+    @media print {
+      .sticky-nav, .scroll-progress-bar, .footer, .download-pdf-btn, #genderGateway,
+      .nav-toggle, .mobile-menu, .mobile-menu-overlay { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .req-card { break-inside: avoid; border: 1px solid #ccc !important; background: #fff !important; }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- Top scroll progress bar -->
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+
   <!-- ======== MOBILE MENU OVERLAY ======== -->
   <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
   <nav class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-inner">
       <button class="mobile-close" id="mobileClose" aria-label="Close menu">
-        <svg viewBox="0 0 24 24" width="28" height="28"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2"/></svg>
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2"/></svg>
       </button>
       <ul class="mobile-nav-links">
         <li><a href="index.html#about">About</a></li>
@@ -357,7 +912,7 @@
     </div>
   </nav>
 
-  <!-- ======== NAVBAR ======== -->
+  <!-- ======== ORIGINAL SITE NAVBAR (hidden after gateway) ======== -->
   <nav class="nav" id="nav">
     <div class="container nav-inner">
       <a href="index.html" class="nav-brand">
@@ -381,57 +936,264 @@
       </ul>
 
       <button class="nav-toggle" id="navToggle" aria-label="Open menu">
-        <svg viewBox="0 0 24 24" width="28" height="28"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2"/></svg>
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2"/></svg>
       </button>
     </div>
   </nav>
 
-  <!-- ===== REQUIREMENTS – PDF VIEWER ===== -->
-  <section class="section" style="padding-top:100px;">
-    <div class="container" style="max-width:100%; padding:0;">
-      <div class="section-head reveal" style="padding:0 16px;">
-        <span class="eyebrow">Come Prepared</span>
-        <h2>Camp <span class="text-gradient">Requirements</span></h2>
-        <p>View the full packing list and guidelines below. Scroll through the PDF or use the navigation controls.</p>
-      </div>
+  <!-- ============================================================
+  REQUIREMENTS PAGE CONTENT
+  ============================================================ -->
 
-      <!-- PDF Viewer -->
-      <div class="pdf-viewer-wrapper reveal">
-        <!-- Controls -->
-        <div class="pdf-controls glass">
-          <button class="ctrl-btn" id="prevPage" aria-label="Previous page">‹</button>
-          <span class="page-indicator">
-            <span id="pageNum">1</span> / <span id="pageCount">…</span>
-          </span>
-          <button class="ctrl-btn" id="nextPage" aria-label="Next page">›</button>
-          <div class="ctrl-divider"></div>
-          <button class="ctrl-btn" id="zoomOut" aria-label="Zoom out">−</button>
-          <span class="zoom-indicator" id="zoomLevel">100%</span>
-          <button class="ctrl-btn" id="zoomIn" aria-label="Zoom in">+</button>
-          <div class="ctrl-divider"></div>
-          <button class="ctrl-btn" id="fullscreenBtn" aria-label="Full screen">⛶</button>
-        </div>
+  <main style="padding-top:0;">
 
-        <!-- Canvas Container -->
-        <div class="pdf-canvas-container glass" id="pdfContainer">
-          <canvas id="pdfCanvas"></canvas>
-          <div class="pdf-loading" id="pdfLoading">Loading PDF…</div>
-
-          <!-- Swipe CTA (mobile only) -->
-          <div class="swipe-cta" id="swipeCta">
-            <span class="arrow">‹</span>
-            <span>Swipe to browse</span>
-            <span class="arrow">›</span>
+    <!-- ---- GENDER GATEWAY ---- -->
+    <section id="genderGateway">
+      <div class="container">
+        <div class="gateway-card">
+          <h2>👋 Welcome to Camp</h2>
+          <p class="sub">Select your gender to view your personalized packing list.</p>
+          <div class="gender-options">
+            <button class="gender-btn" data-gender="boys">
+              <span class="symbol" aria-hidden="true">♂</span>
+              <span class="label">Boys</span>
+              <span class="desc">For the Guys</span>
+            </button>
+            <button class="gender-btn" data-gender="girls">
+              <span class="symbol" aria-hidden="true">♀</span>
+              <span class="label">Girls</span>
+              <span class="desc">For the Ladies</span>
+            </button>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- Back Link -->
-      <div style="text-align:center; margin-top:28px; padding:0 16px;">
-        <a href="index.html" style="color:var(--text-muted); font-weight:500; transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">← Back to Home</a>
+    <!-- ---- MAIN CONTENT (hidden until gender selected) ---- -->
+    <div id="mainContent" style="display:none;">
+
+      <!-- Sticky Navigation (becomes the main nav after gateway) -->
+      <nav class="sticky-nav" id="stickyNav">
+        <div class="container">
+          <div class="nav-inner">
+            <div class="nav-row-top">
+              <!-- Brand + Logo -->
+              <div class="sticky-brand" id="stickyBrand">
+                <a href="index.html" class="nav-brand">
+                  <span class="nav-logo" style="width:32px; height:32px;">
+                    <img src="jt__icon.png" alt="Jesus Tribe" style="width:100%; height:100%; object-fit:contain;" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-fallback\' style=\'font-size:0.8rem;\'>JT</span>';" />
+                  </span>
+                  <span class="nav-brand-text">
+                    Jesus Tribe
+                    <small>TCN ABUJA</small>
+                  </span>
+                </a>
+              </div>
+
+              <div class="nav-pills-scroll">
+                <div class="nav-pills" role="tablist" aria-label="Requirements sections">
+                  <button class="nav-pill active" data-target="essentials" role="tab" aria-selected="true">Essentials <span class="pill-check">✓</span></button>
+                  <button class="nav-pill" data-target="clothing" role="tab" aria-selected="false">Clothing <span class="pill-check">✓</span></button>
+                  <button class="nav-pill" data-target="personal" role="tab" aria-selected="false">Personal <span class="pill-check">✓</span></button>
+                  <button class="nav-pill" data-target="restricted" role="tab" aria-selected="false">Restricted</button>
+                  <button class="nav-pill" data-target="checklist" role="tab" aria-selected="false">Checklist <span class="pill-check">✓</span></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="nav-meta">
+              <button class="change-gender-pill" id="changeGenderPill" type="button" title="Change your selected gender">
+                <span id="changeGenderIcon" aria-hidden="true">♂</span> <span id="changeGenderLabel">Boys</span> · Switch
+              </button>
+
+              <div class="progress-wrap">
+                <span class="label" style="font-size:0.65rem; font-weight:600; color:var(--text-muted); letter-spacing:1px; text-transform:uppercase;">Packed</span>
+                <div class="progress-circle">
+                  <svg viewBox="0 0 44 44" aria-hidden="true">
+                    <circle class="bg" cx="22" cy="22" r="18" />
+                    <circle class="fg" id="progressCircle" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1" />
+                  </svg>
+                  <span class="percent" id="progressPercent">0%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container" style="max-width:820px;">
+
+        <!-- ====== SECTION 1: ESSENTIALS ====== -->
+        <section data-section="essentials">
+          <div class="req-card">
+            <h3>📋 Essentials <span class="item-count" data-count-target="essentials-list"></span></h3>
+            <p style="color:var(--text-soft); font-size:1rem; line-height:1.7; margin-bottom:20px;">
+              <strong style="color:var(--text);">Dear Parents and Teenagers,</strong><br />
+              Kindly find below the full list of items your teenager will need for camp, organized by category so nothing gets left behind.
+            </p>
+
+            <h4>🛏️ Bedding &amp; Toiletries</h4>
+            <ul id="essentials-list">
+              <li><span class="bullet"></span> Bed sheets <span style="color:var(--text-muted); font-size:0.85rem;">– compulsory</span></li>
+              <li><span class="bullet"></span> Blanket or cover cloth</li>
+              <li><span class="bullet"></span> Bath towel and face towel</li>
+              <li><span class="bullet"></span> Laundry bag and bucket</li>
+              <li><span class="bullet"></span> Umbrella / raincoat</li>
+              <li><span class="bullet"></span> Mosquito net</li>
+              <li><span class="bullet"></span> Toothbrush and toothpaste</li>
+              <li><span class="bullet"></span> Bathing soap and washing soap</li>
+              <li><span class="bullet"></span> Tissue paper <span style="color:var(--text-muted); font-size:0.85rem;">(2 packs)</span></li>
+              <li><span class="bullet"></span> Body cream / lotion</li>
+              <li data-gender="girls"><span class="bullet"></span> Sanitary pads</li>
+              <li><span class="bullet"></span> Hair brush / comb</li>
+              <li><span class="bullet"></span> Deodorant / roll-on</li>
+              <li><span class="bullet"></span> Small padlock <span style="color:var(--text-muted); font-size:0.85rem;">– for box/locker</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- ====== SECTION 2: CLOTHING ====== -->
+        <section data-section="clothing">
+          <div class="req-card">
+            <h3>👕 Clothing <span class="item-count" data-count-target="clothing-list"></span></h3>
+
+            <h4>General Clothing</h4>
+            <ul id="clothing-list">
+              <li><span class="bullet"></span> Changes of clothes <span style="color:var(--text-muted); font-size:0.85rem;">(3–4 sets)</span></li>
+              <li><span class="bullet"></span> Slippers <span style="color:var(--text-muted); font-size:0.85rem;">– for shower</span></li>
+              <li><span class="bullet"></span> Sportswear and sport shoes</li>
+              <li><span class="bullet"></span> Sandals / comfortable walking shoes</li>
+              <li><span class="bullet"></span> Cardigan or jacket <span style="color:var(--text-muted); font-size:0.85rem;">– for cold nights</span></li>
+              <li><span class="bullet"></span> Sets of underwear</li>
+              <li><span class="bullet"></span> Socks</li>
+              <li><span class="bullet"></span> Sleepwear <span style="color:var(--text-muted); font-size:0.85rem;">– pyjama trousers or dresses</span></li>
+              <li><span class="bullet"></span> Church/service outfit</li>
+              <li><span class="bullet"></span> Cultural Attire <span style="color:var(--text-muted); font-size:0.85rem;">– for variety night</span></li>
+              <li><span class="bullet"></span> Handkerchief</li>
+            </ul>
+
+            <!-- Gender-Specific Dress Code -->
+            <div style="margin-top:28px; padding-top:24px; border-top:1px solid var(--line);">
+              <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:6px;">
+                <h4 style="margin:0;">👔 Dress Code</h4>
+                <div class="gender-toggle-pill" id="genderTogglePill">
+                  <button class="active" data-gender="boys" aria-pressed="true">♂ Boys</button>
+                  <button data-gender="girls" aria-pressed="false">♀ Girls</button>
+                </div>
+              </div>
+
+              <!-- Boys Dress Code -->
+              <div id="dressCodeBoys" class="dress-code-content">
+                <ul>
+                  <li><span class="bullet"></span> Knee-length shorts</li>
+                  <li><span class="bullet"></span> No cut-off sleeve tops</li>
+                  <li><span class="bullet"></span> No slashed jeans</li>
+                  <li><span class="bullet"></span> No muscle tops</li>
+                  <li><span class="bullet"></span> No tops with inappropriate writing</li>
+                  <li><span class="bullet"></span> Hair should be kept neat</li>
+                </ul>
+              </div>
+
+              <!-- Girls Dress Code -->
+              <div id="dressCodeGirls" class="dress-code-content" style="display:none;">
+                <ul>
+                  <li><span class="bullet"></span> Minimum length of shorts is below the knee</li>
+                  <li><span class="bullet"></span> No tight-fitting tops or half tops</li>
+                  <li><span class="bullet"></span> No transparent or spaghetti-strap tops</li>
+                  <li><span class="bullet"></span> No slashed jeans</li>
+                  <li><span class="bullet"></span> No tops with inappropriate writing</li>
+                  <li><span class="bullet"></span> Knee-length skirts, dresses, and shorts appropriate for evening services</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====== SECTION 3: PERSONAL ====== -->
+        <section data-section="personal">
+          <div class="req-card">
+            <h3>🎒 Personal Effects <span class="item-count" data-count-target="personal-list"></span></h3>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">These items apply to every camper, regardless of gender.</p>
+            <ul id="personal-list">
+              <li><span class="bullet"></span> Bible <span style="color:var(--text-muted); font-size:0.85rem;">– the only book aside from writing materials permitted</span></li>
+              <li><span class="bullet"></span> Notebook and pen</li>
+              <li><span class="bullet"></span> Reusable water bottle</li>
+              <li><span class="bullet"></span> Waist pouch or small backpack</li>
+              <li><span class="bullet"></span> Name tags or labels on all properties</li>
+            </ul>
+
+            <h4 style="margin-top:28px;">💊 Medicals</h4>
+            <div class="highlight-box">
+              <p>• Campers with <strong style="color:var(--text);">asthma</strong> MUST bring at least one personal inhaler and keep it within comfortable reach.</p>
+              <p style="margin-top:8px;">• Campers on medication for any condition should bring the medication to camp and report it to their Tribe head.</p>
+              <p style="margin-top:8px;">• Please list any allergies (food, drug, or otherwise) on the registration form ahead of camp.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====== SECTION 4: RESTRICTED ====== -->
+        <section data-section="restricted">
+          <div class="req-card">
+            <h3>🚫 Restricted Items</h3>
+            <ul>
+              <li><span class="bullet"></span> Electronic gadgets <span style="color:var(--text-muted); font-size:0.85rem;">(phones, laptops, game consoles, iPads, smart watches, iPods)</span></li>
+              <li><span class="bullet"></span> Cash for purchasing food and beverages <span style="color:var(--text-muted); font-size:0.85rem;">– meals and snacks are provided</span></li>
+              <li><span class="bullet"></span> Any books other than writing materials and a Bible</li>
+              <li><span class="bullet"></span> Precooked, bottled, or canned provisions</li>
+            </ul>
+
+            <div class="pull-quote" style="margin-top:24px;">
+              <p>"Searching is a condition of entry, attendance, or continued attendance."</p>
+              <div class="source">— Camp Board</div>
+              <p style="margin-top:12px; font-size:0.92rem; font-weight:400; color:var(--text-soft);">
+                Camp Board may conduct security searches of clothing, bags, and other items at its reasonable discretion.<br />
+                Items deemed inappropriate will be confiscated and returned at the end of the program.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====== SECTION 5: CHECKLIST ====== -->
+        <section data-section="checklist">
+          <div class="req-card">
+            <h3>✅ Quick Packing Checklist</h3>
+            <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:6px;">Tick off each item as it goes into the bag. Your progress is saved on this device.</p>
+
+            <div class="checklist-counter" id="checklistCounter">
+              <span class="num" id="checkedCount">0</span>
+              <span>/</span>
+              <span id="totalCount">0</span>
+              <span style="margin-left:4px;">packed</span>
+            </div>
+
+            <div class="checklist-grid" id="checklistGrid">
+              <!-- Items will be injected by JavaScript -->
+            </div>
+
+            <div style="margin-top:24px; text-align:center; padding-top:20px; border-top:1px solid var(--line);">
+              <p style="color:var(--text-muted); font-size:0.9rem; font-style:italic;">
+                "We can't wait to have your teenager at camp!"
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---- Download PDF Button ---- -->
+        <div style="text-align:center; margin: 40px 0 20px;">
+          <a href="https://drive.google.com/uc?export=download&id=1w8gACzdlfvab92JNxisHShF9C_yqQ4VI" id="downloadPdfBtn" class="download-pdf-btn" download>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/><polyline points="12 12 12 20 16 16"/><line x1="8" y1="16" x2="12" y2="20"/><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="4" x2="20" y2="4"/></svg>
+            Download Full PDF Guide
+          </a>
+        </div>
+
+        <!-- ---- Back Link ---- -->
+        <div style="text-align:center; margin-top:8px; padding-bottom:40px;">
+          <a href="index.html" style="color:var(--text-muted); font-weight:500; transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">← Back to Home</a>
+        </div>
+
       </div>
     </div>
-  </section>
+  </main>
 
   <!-- ======== FOOTER ======== -->
   <footer class="footer">
@@ -470,336 +1232,393 @@
     </div>
   </footer>
 
-  <!-- ===== PDF VIEWER SCRIPT ===== -->
-  <script>
-    (function() {
-      // === CONFIGURATION — UPDATE THIS PATH ===
-      var PDF_URL = 'assets/JesusTribe_Requirements.pdf'; // <-- Change to your PDF file
 
-      var pdfDoc = null;
-      var pageNum = 1;
-      var pageRendering = false;
-      var pageNumPending = null;
-      var scale = 1.6; // Base quality – higher = sharper text
-      var canvas = document.getElementById('pdfCanvas');
-      var ctx = canvas.getContext('2d');
+  <!-- ============================================================
+  SCRIPTS
+  ============================================================ -->
 
-      // Enable high-quality image rendering
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-
-      var container = document.getElementById('pdfContainer');
-      var loadingEl = document.getElementById('pdfLoading');
-      var swipeCta = document.getElementById('swipeCta');
-
-      var prevBtn = document.getElementById('prevPage');
-      var nextBtn = document.getElementById('nextPage');
-      var pageNumEl = document.getElementById('pageNum');
-      var pageCountEl = document.getElementById('pageCount');
-      var zoomInBtn = document.getElementById('zoomIn');
-      var zoomOutBtn = document.getElementById('zoomOut');
-      var zoomLevelEl = document.getElementById('zoomLevel');
-      var fullscreenBtn = document.getElementById('fullscreenBtn');
-
-      // ---- Calculate optimal display dimensions ----
-      function getDisplaySize(pageWidth, pageHeight) {
-        var containerWidth = container.clientWidth - 32;
-        var containerHeight = window.innerHeight * 0.78;
-        var maxWidth = Math.min(containerWidth, 1100);
-
-        var widthRatio = maxWidth / pageWidth;
-        var heightRatio = containerHeight / pageHeight;
-        var fitRatio = Math.min(widthRatio, heightRatio, 2.0);
-        var displayRatio = Math.max(fitRatio, 0.5);
-
-        return {
-          width: pageWidth * displayRatio,
-          height: pageHeight * displayRatio,
-          scale: displayRatio
-        };
-      }
-
-      // ---- Render a page with high quality ----
-      function renderPage(num) {
-        if (!pdfDoc) return;
-
-        pageRendering = true;
-        loadingEl.classList.remove('hidden');
-
-        pdfDoc.getPage(num).then(function(page) {
-          var viewport = page.getViewport({ scale: 1 });
-          var pageWidth = viewport.width;
-          var pageHeight = viewport.height;
-
-          // Calculate display size
-          var display = getDisplaySize(pageWidth, pageHeight);
-
-          // Render at high resolution using devicePixelRatio for crispness
-          var pixelRatio = window.devicePixelRatio || 1;
-          var renderScale = scale * display.scale * pixelRatio;
-          var renderViewport = page.getViewport({ scale: renderScale });
-
-          // Set canvas internal resolution (high for clarity)
-          canvas.width = renderViewport.width;
-          canvas.height = renderViewport.height;
-
-          // Set CSS display size (fits container)
-          var cssWidth = renderViewport.width / pixelRatio;
-          var cssHeight = renderViewport.height / pixelRatio;
-          canvas.style.width = cssWidth + 'px';
-          canvas.style.height = cssHeight + 'px';
-          canvas.style.maxWidth = '100%';
-          canvas.style.maxHeight = '82vh';
-
-          var renderContext = {
-            canvasContext: ctx,
-            viewport: renderViewport,
-            background: '#0A0D17'
-          };
-
-          var renderTask = page.render(renderContext);
-
-          renderTask.promise.then(function() {
-            pageRendering = false;
-            loadingEl.classList.add('hidden');
-            if (pageNumPending !== null) {
-              renderPage(pageNumPending);
-              pageNumPending = null;
-            }
-          }).catch(function(err) {
-            console.warn('Render error:', err);
-            pageRendering = false;
-            loadingEl.classList.add('hidden');
-          });
-        }).catch(function(err) {
-          console.warn('Page load error:', err);
-          pageRendering = false;
-          loadingEl.classList.add('hidden');
-        });
-
-        pageNumEl.textContent = num;
-      }
-
-      // ---- Queue render ----
-      function queueRenderPage(num) {
-        if (pageRendering) {
-          pageNumPending = num;
-        } else {
-          renderPage(num);
-        }
-      }
-
-      // ---- Navigate ----
-      function onPrevPage() {
-        if (!pdfDoc || pageNum <= 1) return;
-        pageNum--;
-        queueRenderPage(pageNum);
-        hideSwipeCta();
-      }
-
-      function onNextPage() {
-        if (!pdfDoc || pageNum >= pdfDoc.numPages) return;
-        pageNum++;
-        queueRenderPage(pageNum);
-        hideSwipeCta();
-      }
-
-      // ---- Zoom ----
-      function updateZoom() {
-        var percent = Math.round(scale * 100);
-        zoomLevelEl.textContent = percent + '%';
-        if (pdfDoc) queueRenderPage(pageNum);
-      }
-
-      function onZoomIn() {
-        if (scale >= 3.0) return;
-        scale += 0.15;
-        updateZoom();
-        hideSwipeCta();
-      }
-
-      function onZoomOut() {
-        if (scale <= 0.5) return;
-        scale -= 0.15;
-        updateZoom();
-        hideSwipeCta();
-      }
-
-      // ---- Fullscreen ----
-      function toggleFullscreen() {
-        var el = container;
-        if (!document.fullscreenElement) {
-          el.requestFullscreen().catch(function(err) {
-            el.scrollIntoView({ behavior: 'smooth' });
-          });
-        } else {
-          document.exitFullscreen();
-        }
-      }
-
-      // ---- Swipe CTA ----
-      var swipeCtaTimeout = null;
-
-      function showSwipeCta() {
-        if (!swipeCta) return;
-        // Only show on touch devices
-        if (!('ontouchstart' in window) && !navigator.maxTouchPoints) return;
-        swipeCta.classList.add('show');
-        clearTimeout(swipeCtaTimeout);
-        swipeCtaTimeout = setTimeout(function() {
-          swipeCta.classList.remove('show');
-        }, 5000);
-      }
-
-      function hideSwipeCta() {
-        if (!swipeCta) return;
-        swipeCta.classList.remove('show');
-        clearTimeout(swipeCtaTimeout);
-      }
-
-      // ---- Touch Swipe Support ----
-      var touchStartX = 0;
-      var touchStartY = 0;
-      var touchEndX = 0;
-      var isSwiping = false;
-
-      container.addEventListener('touchstart', function(e) {
-        var touch = e.touches[0];
-        touchStartX = touch.clientX;
-        touchStartY = touch.clientY;
-        isSwiping = false;
-      }, { passive: true });
-
-      container.addEventListener('touchmove', function(e) {
-        if (!pdfDoc) return;
-        var touch = e.touches[0];
-        var deltaX = touch.clientX - touchStartX;
-        var deltaY = touch.clientY - touchStartY;
-
-        // Detect horizontal swipe (if horizontal movement > vertical)
-        if (Math.abs(deltaX) > 20 && Math.abs(deltaX) > Math.abs(deltaY) * 0.8) {
-          isSwiping = true;
-          // Visual feedback: slight canvas translation
-          var translate = Math.min(Math.max(deltaX * 0.15, -40), 40);
-          canvas.style.transform = 'translateX(' + translate + 'px)';
-          canvas.style.transition = 'none';
-        }
-      }, { passive: true });
-
-      container.addEventListener('touchend', function(e) {
-        if (!pdfDoc || !isSwiping) {
-          canvas.style.transform = '';
-          canvas.style.transition = '';
-          return;
-        }
-
-        var deltaX = touchStartX - (e.changedTouches ? e.changedTouches[0].clientX : touchStartX);
-
-        // Reset canvas transform
-        canvas.style.transform = '';
-        canvas.style.transition = 'transform 0.3s ease';
-
-        // Threshold for page change: 50px
-        if (deltaX > 50) {
-          onNextPage();
-        } else if (deltaX < -50) {
-          onPrevPage();
-        }
-
-        isSwiping = false;
-        hideSwipeCta();
-      }, { passive: true });
-
-      // ---- Load PDF ----
-      function loadPDF() {
-        loadingEl.classList.remove('hidden');
-        var loadingTask = pdfjsLib.getDocument(PDF_URL);
-        loadingTask.promise.then(function(pdf) {
-          pdfDoc = pdf;
-          pageCountEl.textContent = pdfDoc.numPages;
-          renderPage(pageNum);
-
-          // Show swipe CTA after a moment (mobile only)
-          setTimeout(showSwipeCta, 2500);
-        }).catch(function(err) {
-          loadingEl.textContent = '⚠️ Could not load PDF. Please check the file path.';
-          loadingEl.style.color = '#E86A4D';
-          console.error('PDF load error:', err);
-        });
-      }
-
-      // ---- Attach events ----
-      if (prevBtn) prevBtn.addEventListener('click', onPrevPage);
-      if (nextBtn) nextBtn.addEventListener('click', onNextPage);
-      if (zoomInBtn) zoomInBtn.addEventListener('click', onZoomIn);
-      if (zoomOutBtn) zoomOutBtn.addEventListener('click', onZoomOut);
-      if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
-
-      // ---- Keyboard shortcuts ----
-      document.addEventListener('keydown', function(e) {
-        var viewer = document.querySelector('.pdf-viewer-wrapper');
-        if (!viewer) return;
-        var rect = viewer.getBoundingClientRect();
-        if (rect.top > window.innerHeight || rect.bottom < 0) return;
-
-        if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault();
-          onPrevPage(); }
-        if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault();
-          onNextPage(); }
-        if (e.key === '+' || e.key === '=') { e.preventDefault();
-          onZoomIn(); }
-        if (e.key === '-') { e.preventDefault();
-          onZoomOut(); }
-        if (e.key === 'f' || e.key === 'F') { e.preventDefault();
-          toggleFullscreen(); }
-      });
-
-      // ---- Re‑render on resize (debounced) ----
-      var resizeTimer;
-      window.addEventListener('resize', function() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function() {
-          if (pdfDoc) {
-            // Recalculate display size and re-render
-            renderPage(pageNum);
-          }
-        }, 300);
-      });
-
-      // ---- Start ----
-      loadPDF();
-
-      // ---- Also re-render when fullscreen changes ----
-      document.addEventListener('fullscreenchange', function() {
-        if (pdfDoc) {
-          setTimeout(function() {
-            renderPage(pageNum);
-          }, 200);
-        }
-      });
-
-    })();
-  </script>
-
-  <!-- ===== Mobile menu & scroll reveal ===== -->
+  <!-- Mobile menu & scroll reveal (from app.js) -->
   <script src="app.js"></script>
+
   <script>
     (function() {
-      var reveals = document.querySelectorAll('.reveal');
-      if ('IntersectionObserver' in window) {
-        var obs = new IntersectionObserver(function(entries) {
-          entries.forEach(function(e) {
-            if (e.isIntersecting) {
-              e.target.classList.add('visible');
-              obs.unobserve(e.target);
+      'use strict';
+
+      var STORAGE_KEY = 'jtCampChecklistState_v1';
+
+      // ==========================================================
+      // 1. GENDER GATEWAY + FULL-PAGE FILTERING
+      // ==========================================================
+      var gateway = document.getElementById('genderGateway');
+      var mainContent = document.getElementById('mainContent');
+      var genderBtns = document.querySelectorAll('.gender-btn');
+      var toggleBtns = document.querySelectorAll('#genderTogglePill button');
+      var boysDress = document.getElementById('dressCodeBoys');
+      var girlsDress = document.getElementById('dressCodeGirls');
+      var changeGenderPill = document.getElementById('changeGenderPill');
+      var changeGenderIcon = document.getElementById('changeGenderIcon');
+      var changeGenderLabel = document.getElementById('changeGenderLabel');
+
+      // Nav elements
+      var siteNav = document.getElementById('nav');
+      var stickyNav = document.getElementById('stickyNav');
+      var stickyBrand = document.getElementById('stickyBrand');
+
+      var selectedGender = 'boys';
+
+      // ---- Keep --nav-height in sync with the sticky nav's REAL height ----
+      // The nav wraps to 1-3 rows depending on viewport width and content
+      // (brand, pills, switch pill, progress circle), so a fixed pixel
+      // value can't work here — we measure it live instead.
+      function updateNavHeight() {
+        if (!stickyNav.classList.contains('visible')) return;
+        var h = stickyNav.offsetHeight;
+        document.documentElement.style.setProperty('--nav-height', h + 'px');
+      }
+      window.addEventListener('resize', updateNavHeight);
+      // Re-measure after fonts/webfonts settle, which can shift heights
+      window.addEventListener('load', updateNavHeight);
+
+      function applyGenderFilter(gender) {
+        // Dress code block
+        if (gender === 'boys') {
+          boysDress.style.display = 'block';
+          girlsDress.style.display = 'none';
+        } else {
+          boysDress.style.display = 'none';
+          girlsDress.style.display = 'block';
+        }
+
+        // Toggle pills inside dress code
+        toggleBtns.forEach(function(btn) {
+          var active = btn.dataset.gender === gender;
+          btn.classList.toggle('active', active);
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+
+        // Any element anywhere on the page tagged with data-gender
+        document.querySelectorAll('[data-gender]').forEach(function(el) {
+          // Skip the toggle buttons themselves — handled above
+          if (el.closest('#genderTogglePill')) return;
+          var wantsGender = el.getAttribute('data-gender');
+          el.classList.toggle('gender-hidden', wantsGender !== gender);
+        });
+
+        // Sticky change-gender pill label
+        changeGenderIcon.textContent = gender === 'boys' ? '♂' : '♀';
+        changeGenderLabel.textContent = gender === 'boys' ? 'Boys' : 'Girls';
+
+        updateItemCounts();
+      }
+
+      // Counts only the items actually visible right now (respects the
+      // gender filter), so the badge never drifts out of sync with the list.
+      function updateItemCounts() {
+        document.querySelectorAll('[data-count-target]').forEach(function(badge) {
+          var list = document.getElementById(badge.dataset.countTarget);
+          if (!list) return;
+          var visible = list.querySelectorAll(':scope > li:not(.gender-hidden)').length;
+          badge.textContent = visible + (visible === 1 ? ' item' : ' items');
+        });
+      }
+
+      function setGender(gender) {
+        selectedGender = gender;
+        applyGenderFilter(gender);
+        // "Boys"/"Girls" text length differs, which can change how the
+        // switch pill wraps — re-measure the nav after the DOM settles.
+        requestAnimationFrame(updateNavHeight);
+      }
+
+      function revealMainContent(gender) {
+        selectedGender = gender;
+
+        // Fade out gateway
+        gateway.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        gateway.style.opacity = '0';
+        gateway.style.transform = 'scale(0.96)';
+
+        // Hide original site nav
+        siteNav.classList.add('hidden-nav');
+
+        setTimeout(function() {
+          gateway.style.display = 'none';
+          mainContent.style.display = 'block';
+          document.body.style.overflow = 'auto';
+
+          // Show sticky nav (becomes the main nav)
+          stickyNav.classList.add('visible');
+          if (stickyBrand) stickyBrand.style.display = 'block';
+
+          // Set gender, then settle at the top (Essentials) rather than
+          // jumping down to Clothing.
+          setGender(gender);
+          updateNavHeight();
+          setTimeout(function() {
+            updateNavHeight(); // final measurement once layout has settled
+            window.scrollTo({ top: 0, behavior: 'auto' });
+          }, 300);
+
+          // Re-trigger card animations
+          document.querySelectorAll('.req-card').forEach(function(card, i) {
+            card.style.animation = 'none';
+            card.offsetHeight; // reflow
+            card.style.animation = 'cardReveal 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards';
+            card.style.animationDelay = (i * 0.1) + 's';
+          });
+
+          // Init checklist and scroll spy
+          initChecklist();
+          initScrollSpy();
+          initScrollProgressBar();
+          updateNavHeight();
+
+          // Close mobile menu if open
+          var mobileMenu = document.getElementById('mobileMenu');
+          var overlay = document.getElementById('mobileMenuOverlay');
+          if (mobileMenu && mobileMenu.classList.contains('active')) {
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+          }
+
+        }, 500);
+      }
+
+      // Gateway buttons
+      genderBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          revealMainContent(this.dataset.gender);
+        });
+      });
+
+      // Toggle pills (inside dress code) — also drives full-page filter
+      toggleBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          setGender(this.dataset.gender);
+        });
+      });
+
+      // Sticky "change gender" pill — flips gender in place, no reload needed
+      changeGenderPill.addEventListener('click', function() {
+        var next = selectedGender === 'boys' ? 'girls' : 'boys';
+        setGender(next);
+      });
+
+
+      // ==========================================================
+      // 2. SCROLL SPY & CHECKLIST-BASED PROGRESS CIRCLE
+      // ==========================================================
+      function initScrollSpy() {
+        var sections = document.querySelectorAll('[data-section]');
+        var navPills = document.querySelectorAll('.nav-pill');
+
+        function updateActivePill() {
+          var currentSection = 'essentials';
+          sections.forEach(function(section) {
+            var rect = section.getBoundingClientRect();
+            if (rect.top <= 120) {
+              currentSection = section.dataset.section;
             }
           });
-        }, { threshold: 0.1 });
-        reveals.forEach(function(r) { obs.observe(r); });
-      } else {
-        reveals.forEach(function(r) { r.classList.add('visible'); });
+
+          navPills.forEach(function(pill) {
+            var active = pill.dataset.target === currentSection;
+            pill.classList.toggle('active', active);
+            pill.setAttribute('aria-selected', active ? 'true' : 'false');
+          });
+        }
+
+        // Nav pill clicks
+        navPills.forEach(function(pill) {
+          pill.addEventListener('click', function() {
+            var target = this.dataset.target;
+            var section = document.querySelector('[data-section="' + target + '"]');
+            if (section) {
+              section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        });
+
+        window.addEventListener('scroll', updateActivePill);
+        window.addEventListener('resize', updateActivePill);
+        setTimeout(updateActivePill, 100);
       }
+
+      // Thin top bar tracking raw scroll position through the page
+      function initScrollProgressBar() {
+        var bar = document.getElementById('scrollProgressBar');
+
+        function update() {
+          var scrollTop = window.scrollY;
+          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          var pct = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
+          bar.style.width = pct + '%';
+        }
+
+        window.addEventListener('scroll', update);
+        window.addEventListener('resize', update);
+        setTimeout(update, 100);
+      }
+
+      // Circle in the sticky nav tracks CHECKLIST COMPLETION, not scroll
+      var circumference = 113.1; // 2 * PI * 18
+      function updateProgressCircle(checkedCount, total) {
+        var progressCircle = document.getElementById('progressCircle');
+        var progressPercent = document.getElementById('progressPercent');
+        var pct = total > 0 ? (checkedCount / total) * 100 : 0;
+        var offset = circumference - (pct / 100) * circumference;
+        progressCircle.style.strokeDashoffset = offset;
+        progressPercent.textContent = Math.round(pct) + '%';
+      }
+
+
+      // ==========================================================
+      // 3. INTERACTIVE CHECKLIST (with LocalStorage persistence)
+      // ==========================================================
+      var checklistItems = [];
+
+      function loadSavedState() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function saveState() {
+        try {
+          var state = {};
+          checklistItems.forEach(function(item) {
+            state[item.text] = item.checked;
+          });
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+          /* localStorage unavailable — fail silently, in-memory state still works */
+        }
+      }
+
+      function initChecklist() {
+        var grid = document.getElementById('checklistGrid');
+        var counter = document.getElementById('checklistCounter');
+        var checkedSpan = document.getElementById('checkedCount');
+        var totalSpan = document.getElementById('totalCount');
+        var checklistPill = document.querySelector('.nav-pill[data-target="checklist"]');
+
+        var items = [
+          "Bed sheets, blanket, towels",
+          "Toiletries bag fully packed",
+          "Enough clothing for each day + sleepwear",
+          "Sportswear and sport shoes",
+          "Bible, notebook, pen",
+          "Inhaler / personal medication (if applicable)",
+          "Padlock, laundry bag",
+          "Name tags on all bags and properties",
+          "No electronic gadgets or cash packed"
+        ];
+
+        var saved = loadSavedState();
+
+        checklistItems = items.map(function(text) {
+          return { text: text, checked: !!saved[text] };
+        });
+
+        function renderChecklist() {
+          grid.innerHTML = '';
+          var checkedCount = 0;
+
+          checklistItems.forEach(function(item, index) {
+            if (item.checked) checkedCount++;
+
+            var div = document.createElement('div');
+            div.className = 'checklist-item' + (item.checked ? ' checked' : '');
+            div.dataset.index = index;
+            div.setAttribute('role', 'checkbox');
+            div.setAttribute('aria-checked', item.checked ? 'true' : 'false');
+            div.setAttribute('tabindex', '0');
+
+            div.innerHTML =
+              '<div class="box">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                  '<polyline points="20 6 9 17 4 12" />' +
+                '</svg>' +
+              '</div>' +
+              '<span class="text">' + item.text + '</span>';
+
+            function toggle() {
+              var idx = parseInt(div.dataset.index, 10);
+              checklistItems[idx].checked = !checklistItems[idx].checked;
+              saveState();
+              renderChecklist();
+            }
+
+            div.addEventListener('click', toggle);
+            div.addEventListener('keydown', function(e) {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggle();
+              }
+            });
+
+            grid.appendChild(div);
+          });
+
+          // Update counter
+          var total = checklistItems.length;
+          checkedSpan.textContent = checkedCount;
+          totalSpan.textContent = total;
+
+          if (checkedCount === total && total > 0) {
+            counter.classList.add('complete');
+            counter.innerHTML =
+              '<span class="num">🎉 ' + checkedCount + '</span>' +
+              '<span>/</span>' +
+              '<span>' + total + '</span>' +
+              '<span style="margin-left:4px;">all packed! Ready for camp!</span>';
+          } else {
+            counter.classList.remove('complete');
+            counter.innerHTML =
+              '<span class="num">' + checkedCount + '</span>' +
+              '<span>/</span>' +
+              '<span>' + total + '</span>' +
+              '<span style="margin-left:4px;">packed</span>';
+          }
+
+          // Reflect completion on the checklist nav pill
+          if (checklistPill) {
+            checklistPill.classList.toggle('section-complete', checkedCount === total && total > 0);
+          }
+
+          updateProgressCircle(checkedCount, total);
+        }
+
+        renderChecklist();
+      }
+
+
+      // ==========================================================
+      // 4. SCROLL REVEAL (fallback)
+      // ==========================================================
+      (function() {
+        var reveals = document.querySelectorAll('.reveal');
+        if ('IntersectionObserver' in window) {
+          var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+              if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                obs.unobserve(e.target);
+              }
+            });
+          }, { threshold: 0.1 });
+          reveals.forEach(function(r) { obs.observe(r); });
+        } else {
+          reveals.forEach(function(r) { r.classList.add('visible'); });
+        }
+      })();
+
     })();
   </script>
+
 </body>
 </html>
