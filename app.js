@@ -26,11 +26,10 @@ function initIntro() {
   var tagline = document.getElementById('introTagline');
   if (!overlay || !tagline) return;
 
-  // ---- Typed.js logic ----
   if (typeof Typed !== 'undefined') {
     var typed = new Typed(tagline, {
-      strings: ['TCN ABUJA · JESUS TRIBE'],
-      typeSpeed: 54,
+      strings: ['TCN ABUJA PRESENTS . . . '],
+      typeSpeed: 60,
       startDelay: 300,
       showCursor: false,
       cursorChar: '|',
@@ -42,14 +41,12 @@ function initIntro() {
     });
     window.typedInstance = typed;
   } else {
-    // Fallback: static text
     tagline.textContent = 'TCN ABUJA · JESUS TRIBE PRESENTS';
     setTimeout(function() {
       overlay.classList.add('hide');
     }, 2500);
   }
 
-  // ---- Click/tap to skip ----
   overlay.addEventListener('click', function() {
     if (!overlay.classList.contains('hide')) {
       overlay.classList.add('hide');
@@ -145,16 +142,34 @@ function startCountdown() {
   _countdownInterval = setInterval(tick, 1000);
 }
 
-// ---- FAQ Accordion ----
+// ============================================================
+//  FAQ DATA — UPDATED (Jesus Tribe Teens Camp 2026 Registration FAQ)
+// ============================================================
 var faqData = [
-  { q:"Who can attend?", a:"Teenagers ages 13–19. Everyone is welcome, whether new or returning." },
-  { q:"How do I register?", a:"Tap any \"Register Now\" button – it will take you to our Google Form. Complete the form and you'll receive a confirmation email." },
-  { q:"Is there a deadline?", a:"Registration closes when capacity is reached or on the announced cut‑off date." },
-  { q:"What should I bring?", a:"Check the \"Requirements\" page for separate lists for boys and girls – it's kept up to date." },
-  { q:"Is there a registration limit?", a:"Yes, to keep the experience safe and personal. Once full, registration closes." },
-  { q:"How do I know I'm registered?", a:"You'll see a confirmation screen after submitting the Google Form and receive a confirmation email." },
-  { q:"Can a parent register for me?", a:"Absolutely. The form captures both your details and parent/guardian info." },
-  { q:"What is TCN / Jesus Tribe?", a:"The Covenant Nation (TCN) is a Nigerian church network. Jesus Tribe is its teen ministry." }
+  {
+    q: "Who can register and what do I need?",
+    a: "You can register if you are 13–19 years old, have a valid birth certificate, a signed parental consent form, a passport photograph, and a valid email address you have access to."
+  },
+  {
+    q: "How do I register?",
+    a: "Fill all relevant information in the registration link correctly and upload all required documents. You can get the link from your campus HODs or our Instagram bio @jesustribe_abj."
+  },
+  {
+    q: "Does registering guarantee I’ll attend camp?",
+    a: "No. Registration is the first step. Meeting the eligibility requirements allows you to be considered, but does not automatically reserve a space."
+  },
+  {
+    q: "When is the deadline for registration?",
+    a: "Registration closes on the 5th of August or when all slots are filled. We strongly encourage you to register as soon as the link opens."
+  },
+  {
+    q: "How do I know my registration was successful?",
+    a: "Confirmation emails will be sent to successfully registered teens. Our Registration Team will also follow up with a phone call — please type your numbers correctly."
+  },
+  {
+    q: "I have other questions not answered here.",
+    a: "Reach out to the contact numbers on the flier or send us a DM on Instagram @jesustribe_abj."
+  }
 ];
 
 function initFaq() {
@@ -187,7 +202,6 @@ function initFaq() {
 // ============================================================
 //  GALLERY — FILTERABLE VERTICAL GRID WITH LIGHTBOX
 // ============================================================
-
 var galleryPhotos = [];
 var filteredPhotos = [];
 
@@ -195,9 +209,7 @@ function initGallery() {
   var grid = document.getElementById('galleryGrid');
   if (!grid) return;
 
-  // ---- PHOTOS ARRAY (with years) ----
   galleryPhotos = [
-    // Grounded, 2025
     { label: 'Moments', src: 'IMG-20260629-WA0003.jpg', edition: "Grounded, 2025" },
     { label: 'Moments', src: 'IMG-20260629-WA0004.jpg', edition: "Evolve, 2024" },
     { label: 'Sessions', src: 'IMG-20260629-WA0005.jpg', edition: "Grounded, 2025" },
@@ -219,8 +231,6 @@ function initGallery() {
     { label: 'Small Groups', src: 'IMG_5209.jpg', edition: "Grounded, 2025" },
     { label: 'Prayer Session', src: 'IMG_5210.jpg', edition: "Grounded, 2025" },
     { label: 'Group Activities', src: 'IMG_5215.jpg', edition: "Grounded, 2025" },
-
-    // It's Time, 2023 (20)
     { label: 'Check-in', src: 'MG_0476.JPG', edition: "It's Time, 2023" },
     { label: 'Moments', src: 'MG_0477.JPG', edition: "It's Time, 2023" },
     { label: 'Workshop', src: 'MG_0487.JPG', edition: "It's Time, 2023" },
@@ -241,8 +251,6 @@ function initGallery() {
     { label: 'Community', src: '_MG_1328.JPG', edition: "It's Time, 2023" },
     { label: 'Interaction', src: '_MG_1331.JPG', edition: "It's Time, 2023" },
     { label: 'Teaching', src: '_MG_1334.JPG', edition: "It's Time, 2023" },
-
-    // Evolve, 2024 – Stage & Indoor (20)
     { label: 'Audience', src: '_MG_2473.jpg', edition: "Evolve, 2024" },
     { label: 'Check-in', src: '_MG_2475.jpg', edition: "Evolve, 2024" },
     { label: 'Speaker', src: '_MG_2476.jpg', edition: "Evolve, 2024" },
@@ -263,8 +271,6 @@ function initGallery() {
     { label: 'Conversation', src: '_MG_2541.jpg', edition: "Evolve, 2024" },
     { label: 'Portrait', src: '_MG_2549.jpg', edition: "Evolve, 2024" },
     { label: 'Session', src: '_MG_2556.jpg', edition: "Evolve, 2024" },
-
-    // Evolve, 2024 – Outdoor & Activities (20)
     { label: 'Panel', src: '_MG_2566.jpg', edition: "Evolve, 2024" },
     { label: 'Discussion', src: '_MG_2568.jpg', edition: "Evolve, 2024" },
     { label: 'Moments', src: '_MG_2576.jpg', edition: "Evolve, 2024" },
@@ -287,7 +293,6 @@ function initGallery() {
     { label: 'Fellowship', src: '_MG_2699.jpg', edition: "Evolve, 2024" }
   ];
 
-  // ---- Render function ----
   function render(edition) {
     grid.innerHTML = '';
     filteredPhotos = edition === 'all'
@@ -338,7 +343,6 @@ function initGallery() {
     window._filteredPhotos = filteredPhotos;
   }
 
-  // ---- Filter buttons ----
   var btns = document.querySelectorAll('.filter-btn');
   btns.forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -348,8 +352,6 @@ function initGallery() {
     });
   });
 
-  // ---- Clicking an edition tag filters the gallery ----
-  // Using event delegation on the grid
   grid.addEventListener('click', function(e) {
     var tag = e.target.closest('.edition-tag');
     if (tag) {
@@ -357,7 +359,6 @@ function initGallery() {
       var edition = tag.textContent.trim();
       var btns = document.querySelectorAll('.filter-btn');
       btns.forEach(function(btn) {
-        // Match by data-edition or display text
         if (btn.dataset.edition === edition || btn.textContent.trim() === edition) {
           btn.click();
         }
@@ -365,14 +366,12 @@ function initGallery() {
     }
   });
 
-  // ---- Initial render (All) ----
   render('all');
 }
 
 // ============================================================
 //  LIGHTBOX — WORKS WITH FILTERED PHOTOS
 // ============================================================
-
 var lightboxIndex = 0;
 
 function openLightbox(index) {
@@ -449,21 +448,17 @@ function closeLightbox() {
   }
 }
 
-// ---- Lightbox Touch Swipe & Keyboard ----
 function initLightboxSwipe() {
   var lightbox = document.getElementById('lightbox');
   if (!lightbox) return;
 
   var touchStartX = 0;
-
   lightbox.addEventListener('touchstart', function(e) {
     touchStartX = e.changedTouches[0].screenX;
   }, { passive: true });
-
   lightbox.addEventListener('touchmove', function(e) {
     e.preventDefault();
   }, { passive: false });
-
   lightbox.addEventListener('touchend', function(e) {
     var diff = touchStartX - e.changedTouches[0].screenX;
     if (Math.abs(diff) > 50) {
@@ -531,7 +526,6 @@ function initRequirements() {
     gateway.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
     gateway.style.opacity = '0';
     gateway.style.transform = 'scale(0.95)';
-
     setTimeout(function() {
       gateway.style.display = 'none';
       display.style.display = 'block';
@@ -539,7 +533,6 @@ function initRequirements() {
         display.classList.add('visible');
       });
     }, 400);
-
     if (gender === 'boys') {
       boysList.style.display = 'block';
       girlsList.style.display = 'none';
@@ -576,13 +569,12 @@ document.addEventListener('DOMContentLoaded', function() {
   initReveal();
   startCountdown();
   initFaq();
-  //initGallery();
+  // initGallery(); // Uncomment if you're on a page with the gallery grid
   initTestimonials();
   initMobileCta();
   initLightboxSwipe();
   initRequirements();
 
-  // Lightbox close events
   var closeBtn = document.getElementById('lightboxClose');
   if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
   var lightbox = document.getElementById('lightbox');
@@ -592,6 +584,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Set current year in footer
   document.getElementById('year').textContent = new Date().getFullYear();
 });
