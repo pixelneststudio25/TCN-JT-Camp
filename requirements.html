@@ -915,15 +915,16 @@
   <!-- ======== ORIGINAL SITE NAVBAR (hidden after gateway) ======== -->
   <nav class="nav" id="nav">
     <div class="container nav-inner">
-      <a href="index.html" class="nav-brand">
-        <span class="nav-logo">
-          <img src="jt__icon.png" alt="Jesus Tribe" style="width:100%; height:100%; object-fit:contain;" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-fallback\'>JT</span>';" />
-          <span class="logo-fallback" style="display:none;">JT</span>
-        </span>
-        <span class="nav-brand-text">
-          Jesus Tribe
-          <small>TCN ABUJA</small>
-        </span>
+      <a href="#hero" class="nav-brand" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
+          <!-- JT Logo (linked to hero) -->
+          <span class="nav-logo">
+            <img src="jt__icon.png" alt="Jesus Tribe" style="width:100%; height:100%; object-fit:contain;" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-fallback\'>JT</span>';" />
+            <span class="logo-fallback" style="display:none;">JT</span>
+          </span>
+          <!-- TCN Logo (no link) -->
+          <span class="nav-logo1" style="border-color:transparent; box-shadow:none; background:transparent;">
+              <img src="tcn-logo_white.png" alt="The Covenant Nation" style="width:100%; height:100%; object-fit:contain;" />
+          </span>
       </a>
 
       <ul class="nav-links">
