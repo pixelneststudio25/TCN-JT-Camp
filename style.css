@@ -4,6 +4,7 @@
    ========================================================================== */
 
 /* ---- DESIGN TOKENS ---- */
+
 :root {
   --bg-deep:    #06080E;
   --bg-900:     #04060A;
@@ -48,6 +49,11 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+}
+/* ---- CINZEL HERO HEADING ---- */
+.hero h1 {
+    font-family: 'Cinzel', serif;
+    font-weight: 500;
 }
 
 body::before {
@@ -228,6 +234,11 @@ h1,h2,h3,h4 {
   height: 130px;
   animation: logoIntro 1s ease-out forwards;
 }
+.intro-logo img{
+  width: auto;
+  height: 160px;
+  animation: logoIntro 1s ease-out forwards;
+}
 
 /* ---- TAGLINE ---- */
 .intro-tagline-wrapper {
@@ -241,22 +252,22 @@ h1,h2,h3,h4 {
   font-weight: 700;
   letter-spacing: 4px;
   text-transform: uppercase;
-  font-size: 0.95rem;
+  font-size: 1.2rem;
   margin: 0;
   text-align: center;
 }
 
 /* ---- MOBILE ---- */
-@media (max-width: 680px) {
+@media (max-width: 768px) {
   .intro-logo {
     gap: 14px;
   }
-  .intro-logo-svg {
-    width: 80px;
-    height: 80px;
+  .intro-logo img {
+    width: auto;
+    height: 85px;
   }
   .intro-tagline {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     letter-spacing: 2px;
   }
 }
@@ -284,8 +295,6 @@ h1,h2,h3,h4 {
   background: rgba(255,255,255,0.06);
   display: grid; place-items: center;
   overflow: hidden; flex-shrink: 0;
-  border: 1px solid var(--gold);
-  box-shadow: 0 0 12px rgba(202,165,60,0.4);
 }
 .nav-logo img { width:100%; height:100%; object-fit:cover; }
 .logo-fallback {
@@ -293,6 +302,13 @@ h1,h2,h3,h4 {
   color: var(--gold); background: var(--bg-deep);
   width: 100%; height: 100%; display: grid; place-items: center;
 }
+.nav-logo1 {
+  width: auto; height: 50px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden; flex-shrink: 0;
+}
+.nav-logo img { width:auto; height: 50px; object-fit:cover; }
+
 .nav-brand-text {
   font-weight: 800;
   font-size: 1.1rem;
@@ -490,7 +506,13 @@ h1,h2,h3,h4 {
   font-weight: 900;
   line-height: 1.05;
   margin-bottom: 14px;
+  margin-top: 80px;
   text-shadow: 0 4px 30px rgba(202, 164, 60, 0.1);
+}
+@media (max-width: 768px) {
+  .hero h1 {
+    margin-top: 140px;
+  }
 }
 
 /* --- "Summer Camp" subtitle (hero-theme)
@@ -860,7 +882,7 @@ h1,h2,h3,h4 {
   .about-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
 }
-@media (max-width: 680px) {
+@media (max-width: 920px) {
   .nav-links { display: none; }
   .nav-toggle { display: block; }
   .footer-grid { grid-template-columns: 1fr; }
@@ -1355,4 +1377,3 @@ h1,h2,h3,h4 {
     max-width: 400px;
   }
 }
-
